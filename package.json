@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",
+    "@quasar/quasar-app-extension-qcalendar": "^3.4.1",
     "@types/node": "^10.17.15",
     "@types/ramda": "github:types/npm-ramda"
   },

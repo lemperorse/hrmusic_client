@@ -5,15 +5,54 @@
       <span>View Training Date</span>
     </div>
     <div class="flex flex-col justify-center items-center">
+      <div class="row justify-center items-center">
+        <q-btn flat dense label="Prev" @click="calendarPrev" />
+        <q-separator vertical />
+        <q-btn flat dense label="Next" @click="calendarNext" />
+      </div>
       <br />
-      <q-date
-        v-model="dateRang"
-        range
-        multiple
-        color="yellow"
-        text-color="black"
-        @click="open()"
-      />
+      <div style="max-width: 800px; width: 100%">
+        <q-calendar
+          ref="calendar"
+          v-model="selectedDate"
+          view="month"
+          locale="en-us"
+          :day-height="100"
+          date="2021-08-12"
+        >
+          <template #day="{ timestamp }">
+            <template v-for="(event, index) in getEvents(timestamp.date)">
+              <q-badge
+                @click="opentEventDialog(event)"
+                :key="index"
+                style="
+                  width: 100%;
+                  cursor: pointer;
+                  height: 16px;
+                  max-height: 16px;
+                  padding:10px
+                "
+                class="
+                  q-row-event
+                  text-white
+                  bg-purple
+                  full-width
+                  cursor-pointer
+                  q-day-event-void
+               
+                "
+              >
+                <q-icon
+                  v-if="event.icon"
+                  :name="event.icon"
+                  class="q-mr-xs"
+                ></q-icon
+                ><span class="ellipsis">{{ event.title }}</span>
+              </q-badge>
+            </template>
+          </template>
+        </q-calendar>
+      </div>
       <div v-for="x in 5" :key="x" class="w-10/12">
         <q-item class="rounded-xl border-1 bg-white shadow-xl mt-2">
           <q-item-section avatar>
@@ -32,23 +71,143 @@
         </q-item>
       </div>
     </div>
+    <q-dialog v-model="eventDialog" persistent>
+      <q-card class="w-full p-4">
+        <h2 class="text-xl p-4">{{ from.title }}</h2>
+        <q-card-section class="rounded-xl border-2 border-blue-400 w-full">
+          <div class="text-h6">{{ from.date }}</div>
+          <div class="text-h6">{{ from.details }}</div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat label="Cancel" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
 <script>
 </script><script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-
+import QCalendar from "@quasar/quasar-ui-qcalendar";
 @Component({
   components: {},
 })
 export default class PageIndex extends Vue {
+  $refs!: {
+    calendar: HTMLFormElement;
+  };
+  eventDialog: any = false;
+  selectedDate: any = [];
+  from: any = [];
   dateRang: any = [
     { from: "2020/07/01", to: "2020/07/10" },
     { from: "2020/07/21", to: "2020/07/25" },
   ];
+  events: any = [
+    {
+      title: "1st of the Month",
+      details: "Everything is funny as long as it is happening to someone else",
+      date: "2021-08-12",
+      bgcolor: "orange",
+    },
+    {
+      title: "Sisters Birthday",
+      details: "Buy a nice present",
+      date: "2021-08-09",
+      bgcolor: "green",
+      icon: "fas fa-birthday-cake",
+    },
+    {
+      title: "Visit mom",
+      details: "Always a nice chat with mom",
+      date: "2021-08-23",
+      bgcolor: "green",
+      icon: "fas fa-birthday-cake",
+    },
+    {
+      title: "Vacation",
+      details:
+        "Trails and hikes, going camping! Don't forget to bring bear spray!",
+      date: "2021-08-07",
+      bgcolor: "green",
+      icon: "fas fa-birthday-cake",
+    },
+    {
+      title: "Fishing",
+      details: "Time for some weekend R&R",
+      date: "2021-08-29",
+      bgcolor: "green",
+      icon: "fas fa-birthday-cake",
+    },
+  ];
   async open() {
     console.log("rew");
+  }
+  opentEventDialog(date: any) {
+    this.from = date;
+    this.eventDialog = true;
+  }
+  calendarNext() {
+    this.$refs.calendar.next();
+  }
+  calendarPrev() {
+    this.$refs.calendar.prev();
+  }
+  getEvents(dt: any) {
+    console.log("dt", dt);
+    const currentDate: any = QCalendar.parsed(dt);
+    const events: any = [];
+    for (let i = 0; i < this.events.length; ++i) {
+      let added = false;
+      const event = this.events[i];
+      if (event.date === dt) {
+        if (event.time) {
+          if (events.length > 0) {
+            // check for overlapping times
+            const startTime: any = QCalendar.parsed(
+              event.date + " " + event.time
+            );
+            const endTime = QCalendar.addToDate(startTime, {
+              minute: event.duration,
+            });
+            for (let j = 0; j < events.length; ++j) {
+              if (events[j].time) {
+                const startTime2: any = QCalendar.parsed(
+                  events[j].date + " " + events[j].time
+                );
+                const endTime2 = QCalendar.addToDate(startTime2, {
+                  minute: events[j].duration,
+                });
+                if (
+                  QCalendar.isBetweenDates(startTime, startTime2, endTime2) ||
+                  QCalendar.isBetweenDates(endTime, startTime2, endTime2)
+                ) {
+                  events[j].side = "left";
+                  event.side = "right";
+                  events.push(event);
+                  added = true;
+                  break;
+                }
+              }
+            }
+          }
+        }
+        if (!added) {
+          event.side = undefined;
+          events.push(event);
+        }
+      } else if (event.days) {
+        // check for overlapping dates
+        const startDate: any = QCalendar.parsed(event.date);
+        const endDate = QCalendar.addToDate(startDate, { day: event.days });
+        if (QCalendar.isBetweenDates(currentDate, startDate, endDate)) {
+          events.push(event);
+          added = true;
+        }
+      }
+    }
+    return events;
   }
 }
 </script>
