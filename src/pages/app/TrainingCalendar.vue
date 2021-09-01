@@ -5,55 +5,64 @@
       <span>View Training Date</span>
     </div>
     <div class="flex flex-col justify-center items-center">
-      <div class="row justify-center items-center">
-        <q-btn flat dense label="Prev" @click="calendarPrev" />
-        <q-separator vertical />
-        <q-btn flat dense label="Next" @click="calendarNext" />
-      </div>
       <br />
-      <div style="max-width: 800px; width: 100%">
+      <div class="row justify-center items-center">
+        <q-btn
+          class="flex flex-col p-6 m-2"
+          rounded
+          color="primary"
+          label="Prev"
+          @click="calendarPrev"
+        />
+        <q-separator vertical />
+        <q-btn
+          class="flex flex-col p-6 m-2"
+          rounded
+          color="primary"
+          label="Next"
+          @click="calendarNext"
+        />
+      </div>
+      <q-card flat bordered class="w-full p-2">
+        <q-separator />
         <q-calendar
+          class="flex flex-col p-2 m-2"
           ref="calendar"
           v-model="selectedDate"
           view="month"
           locale="en-us"
-          :day-height="100"
-          date="2021-08-12"
+          animated
+          transition-prev="slide-right"
+          transition-next="slide-left"
         >
-          <template #day="{ timestamp }">
-            <template v-for="(event, index) in getEvents(timestamp.date)">
+          <template #week="{ week, weekdays }">
+            <template
+              v-for="(computedEvent, index) in getWeekEvents(week, weekdays)"
+            >
               <q-badge
-                @click="opentEventDialog(event)"
                 :key="index"
-                style="
-                  width: 100%;
-                  cursor: pointer;
-                  height: 16px;
-                  max-height: 16px;
-                  padding:10px
-                "
-                class="
-                  q-row-event
-                  text-white
-                  bg-purple
-                  full-width
-                  cursor-pointer
-                  q-day-event-void
-               
-                "
+                :class="badgeClasses(computedEvent, 'day')"
+                :style="badgeStyles(computedEvent, week.length)"
+                @click="opentEventDialog(computedEvent.event)"
               >
-                <q-icon
-                  v-if="event.icon"
-                  :name="event.icon"
-                  class="q-mr-xs"
-                ></q-icon
-                ><span class="ellipsis">{{ event.title }}</span>
+                <template v-if="computedEvent.event">
+                  <q-icon
+                    :name="computedEvent.event.icon"
+                    class="q-mr-xs"
+                  ></q-icon>
+                  <span class="ellipsis">{{ computedEvent.event.title }}</span>
+                </template>
               </q-badge>
-            </template>
-          </template>
+            </template></template
+          >
         </q-calendar>
-      </div>
-      <div v-for="x in 5" :key="x" class="w-10/12">
+      </q-card>
+      <div
+        v-for="(data, i) in events"
+        :key="i"
+        class="w-10/12"
+        @click="opentEventDialog(data)"
+      >
         <q-item class="rounded-xl border-1 bg-white shadow-xl mt-2">
           <q-item-section avatar>
             <i
@@ -63,23 +72,41 @@
             ></i>
           </q-item-section>
           <q-item-section>
-            <q-item-label>Easy</q-item-label>
+            <q-item-label>{{ data.mode }}</q-item-label>
             <q-item-label caption>
-              <span class="text-base font-bold text-black"> Walk to Moon</span>
+              <span class="text-base font-bold text-black">
+                {{ data.title }}</span
+              >
             </q-item-label>
           </q-item-section>
         </q-item>
       </div>
     </div>
-    <q-dialog v-model="eventDialog" persistent>
+    <q-dialog v-model="eventDialog" >
       <q-card class="w-full p-4">
-        <h2 class="text-xl p-4">{{ from.title }}</h2>
-        <q-card-section class="rounded-xl border-2 border-blue-400 w-full">
-          <div class="text-h6">{{ from.date }}</div>
-          <div class="text-h6">{{ from.details }}</div>
+        <q-card-section horizontal>
+          <q-card-section class="q-pt-xs">
+            <div class="text-overline">{{ form.mode }}</div>
+            <div class="text-h5 q-mt-sm q-mb-xs">{{ form.title }}</div>
+            <div class="text-caption text-grey">
+              {{ form.details }}
+            </div>
+          </q-card-section>
+
+          <q-card-section class="col-5 flex flex-center">
+            <q-img
+              class="rounded-borders"
+              src="https://cdn.quasar.dev/img/parallax2.jpg"
+            />
+          </q-card-section>
         </q-card-section>
-        <q-card-actions align="right">
-          <q-btn flat label="Cancel" color="primary" v-close-popup />
+
+        <q-separator />
+
+        <q-card-actions>
+          <q-btn flat round icon="event" />
+          <div class="text-overline">{{ form.start + " - " + form.end }}</div>
+          <q-btn flat color="primary" v-close-popup> ปิด </q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -94,59 +121,53 @@ import QCalendar from "@quasar/quasar-ui-qcalendar";
   components: {},
 })
 export default class PageIndex extends Vue {
+  miniMode: boolean = true;
+  eventDialog: any = false;
+  form: any = [];
   $refs!: {
     calendar: HTMLFormElement;
   };
-  eventDialog: any = false;
-  selectedDate: any = [];
-  from: any = [];
-  dateRang: any = [
-    { from: "2020/07/01", to: "2020/07/10" },
-    { from: "2020/07/21", to: "2020/07/25" },
-  ];
+  CURRENT_DAY = new Date();
+  selectedDate: any = "";
   events: any = [
     {
-      title: "1st of the Month",
-      details: "Everything is funny as long as it is happening to someone else",
-      date: "2021-08-12",
-      bgcolor: "orange",
-    },
-    {
-      title: "Sisters Birthday",
-      details: "Buy a nice present",
-      date: "2021-08-09",
-      bgcolor: "green",
-      icon: "fas fa-birthday-cake",
-    },
-    {
-      title: "Visit mom",
-      details: "Always a nice chat with mom",
-      date: "2021-08-23",
-      bgcolor: "green",
-      icon: "fas fa-birthday-cake",
+      title: "Fishing",
+      details: "Time for some weekend R&R",
+      color: "orange",
+      start: "2021-09-09",
+      end: "2021-09-22",
+      icon: "cake",
+      mode: "Easy",
     },
     {
       title: "Vacation",
       details:
         "Trails and hikes, going camping! Don't forget to bring bear spray!",
-      date: "2021-08-07",
-      bgcolor: "green",
-      icon: "fas fa-birthday-cake",
+      color: "blue-grey",
+      start: "2021-09-15",
+      end: "2021-09-16",
+      icon: "cake",
+      mode: "Normal",
     },
     {
-      title: "Fishing",
-      details: "Time for some weekend R&R",
-      date: "2021-08-29",
-      bgcolor: "green",
-      icon: "fas fa-birthday-cake",
+      title: "Visit mom",
+      details: "Always a nice chat with mom",
+      color: "blue-grey",
+      start: "2021-09-20",
+      end: "2021-09-20",
+      icon: "cake",
+      mode: "Hard",
     },
   ];
-  async open() {
-    console.log("rew");
-  }
-  opentEventDialog(date: any) {
-    this.from = date;
+  async opentEventDialog(dataEvent: any) {
+    this.form = dataEvent;
     this.eventDialog = true;
+  }
+  getCurrentDay(day: any) {
+    const newDay = new Date();
+    newDay.setDate(day);
+    const tm: any = QCalendar.parseDate(newDay);
+    return tm.date;
   }
   calendarNext() {
     this.$refs.calendar.next();
@@ -154,60 +175,133 @@ export default class PageIndex extends Vue {
   calendarPrev() {
     this.$refs.calendar.prev();
   }
-  getEvents(dt: any) {
-    console.log("dt", dt);
-    const currentDate: any = QCalendar.parsed(dt);
-    const events: any = [];
-    for (let i = 0; i < this.events.length; ++i) {
-      let added = false;
-      const event = this.events[i];
-      if (event.date === dt) {
-        if (event.time) {
-          if (events.length > 0) {
-            // check for overlapping times
-            const startTime: any = QCalendar.parsed(
-              event.date + " " + event.time
-            );
-            const endTime = QCalendar.addToDate(startTime, {
-              minute: event.duration,
-            });
-            for (let j = 0; j < events.length; ++j) {
-              if (events[j].time) {
-                const startTime2: any = QCalendar.parsed(
-                  events[j].date + " " + events[j].time
-                );
-                const endTime2 = QCalendar.addToDate(startTime2, {
-                  minute: events[j].duration,
-                });
-                if (
-                  QCalendar.isBetweenDates(startTime, startTime2, endTime2) ||
-                  QCalendar.isBetweenDates(endTime, startTime2, endTime2)
-                ) {
-                  events[j].side = "left";
-                  event.side = "right";
-                  events.push(event);
-                  added = true;
-                  break;
-                }
-              }
-            }
-          }
-        }
-        if (!added) {
-          event.side = undefined;
-          events.push(event);
-        }
-      } else if (event.days) {
-        // check for overlapping dates
-        const startDate: any = QCalendar.parsed(event.date);
-        const endDate = QCalendar.addToDate(startDate, { day: event.days });
-        if (QCalendar.isBetweenDates(currentDate, startDate, endDate)) {
-          events.push(event);
-          added = true;
-        }
+  insertEvent(
+    events: any,
+    weekLength: any,
+    infoWeek: any,
+    index: any,
+    availableDays: any,
+    level: any
+  ) {
+    const iEvent: any = infoWeek[index];
+    if (iEvent !== undefined && iEvent.left >= availableDays) {
+      // If you have space available, more events are placed
+      if (iEvent.left - availableDays) {
+        // It is filled with empty events
+        events.push({ size: iEvent.left - availableDays });
       }
+      // The event is built
+      events.push({ size: iEvent.size, event: iEvent.event });
+
+      if (level !== 0) {
+        // If it goes into recursion, then the item is deleted
+        infoWeek.splice(index, 1);
+      }
+
+      const currentAvailableDays: any = iEvent.left + iEvent.size;
+      if (currentAvailableDays < weekLength) {
+        const indexNextEvent: any = QCalendar.toString().indexOf(
+          infoWeek,
+          Number(
+            (e: any) => e.id !== iEvent.id && e.left >= currentAvailableDays
+          )
+        );
+
+        this.insertEvent(
+          events,
+          weekLength,
+          infoWeek,
+          indexNextEvent !== -1 ? indexNextEvent : index,
+          currentAvailableDays,
+          level + 1
+        );
+      } // else: There are no more days available, end of iteration
+    } else {
+      events.push({ size: weekLength - availableDays });
+      // end of iteration
     }
+  }
+  getWeekEvents(week: any, weekdays: any) {
+    const tsFirstDay: any = QCalendar.parsed(week[0].date + " 00:00");
+    const tsLastDay: any = QCalendar.parsed(
+      week[week.length - 1].date + " 23:59"
+    );
+    const firstDay: any = QCalendar.getDayIdentifier(tsFirstDay);
+    const lastDay: any = QCalendar.getDayIdentifier(tsLastDay);
+
+    const eventsWeek: any = [];
+    this.events.forEach((event: any, id: any) => {
+      const tsStartDate: any = QCalendar.parsed(event.start + " 00:00");
+      const tsEndDate: any = QCalendar.parsed(event.end + " 23:59");
+      const startDate: any = QCalendar.getDayIdentifier(tsStartDate);
+      const endDate: any = QCalendar.getDayIdentifier(tsEndDate);
+
+      if (this.isBetweenDatesWeek(startDate, endDate, firstDay, lastDay)) {
+        const left: any = QCalendar.daysBetween(tsFirstDay, tsStartDate);
+        const right: any = QCalendar.daysBetween(tsEndDate, tsLastDay);
+
+        eventsWeek.push({
+          id, // index event
+          left, // Position initial day [0-6]
+          right, // Number days available
+          size: week.length - (left + right), // Size current event (in days)
+          event, // Info
+        });
+      }
+    });
+
+    const events: any = [];
+    if (eventsWeek.length > 0) {
+      const infoWeek: any = eventsWeek.sort(
+        (a: any, b: any) => a.left - b.left
+      );
+      infoWeek.forEach((event: any, i: any) => {
+        this.insertEvent(events, week.length, infoWeek, i, 0, 0);
+      });
+    }
+
     return events;
+  }
+  isBetweenDates(date: any, start: any, end: any) {
+    return date >= start && date <= end;
+  }
+  isBetweenDatesWeek(
+    dateStart: any,
+    dateEnd: any,
+    weekStart: any,
+    weekEnd: any
+  ) {
+    return (
+      (dateEnd < weekEnd && dateEnd >= weekStart) ||
+      dateEnd === weekEnd ||
+      (dateEnd > weekEnd && dateStart <= weekEnd)
+    );
+  }
+  badgeClasses(infoEvent: any, type: any) {
+    const color: any =
+      infoEvent.event !== undefined ? infoEvent.event.color : "transparent";
+    const cssColor: any = this.isCssColor(color);
+    const isHeader: any = type === "header";
+
+    return {
+      [`text-white bg-${color}`]: !cssColor,
+      "full-width": !isHeader && (!infoEvent.side || infoEvent.side === "full"),
+      "left-side": !isHeader && infoEvent.side === "left",
+      "right-side": !isHeader && infoEvent.side === "right",
+      "cursor-pointer": infoEvent.event !== undefined,
+      "q-day-event-void": infoEvent.event === undefined, // height: 0, padding: 0
+    };
+  }
+  isCssColor(color: any) {
+    return !!color && !!color.match(/^(#|(rgb|hsl)a?\()/);
+  }
+  badgeStyles(infoEvent: any, weekLength: number) {
+    const s: any = {};
+    if (infoEvent.size !== undefined) {
+      s.width = (100 / weekLength) * infoEvent.size + "% !important";
+    }
+    s["align-items"] = "flex-start";
+    return s;
   }
 }
 </script>
