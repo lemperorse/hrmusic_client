@@ -17,9 +17,9 @@
                         <q-btn @click="planDialog = true" dense flat round color="white" icon="mdi-plus-circle" />
                     </q-toolbar>
                     <div class="w-full">
-                        <q-card-section class="border-b-1 border-gray-400" v-for="(current,j) in listChoosePlan" :key="j">
-                            <div class="text-h6">{{current.name}}</div>
-                            <div class="text-subtitle2">{{current.coach_name}}</div>
+                        <q-card-section class="border-b-1 border-gray-400">
+                            <div class="text-h6">{{listChoosePlan.name}}</div>
+                            <div class="text-subtitle2">Coach : {{listChoosePlan.coach_name}}</div>
                         </q-card-section>
                     </div>
                 </div>
@@ -31,15 +31,15 @@
         </form>
     </div>
 
-    <q-dialog   v-model="planDialog" persistent>
+    <q-dialog v-model="planDialog" persistent>
         <q-card class="w-full p-4">
             <h2 class="text-xl">Choose Plan</h2>
             <q-card-section class="row items-center">
                 <!-- <pre>{{plans}}</pre> -->
-                <q-card-section class="rounded-xl border-2 border-blue-400 w-full" v-for="(plan,i) in plans" :key="i">
+                <q-card-section class="rounded-xl border-2 border-blue-400 w-full mb-2" v-for="(plan,i) in plans" :key="i">
                     <div class="text-h6">{{plan.name}}</div>
-                    <div class="">{{plan.coach_name}}</div>
-                    <div class="text-subtitle2">{{plan.day_traning_program}}</div>
+                    <div class="">Coach : {{plan.coach_name}}</div> <hr> 
+                    <div class="text-subtitle2">{{plan.number_day}} Days</div>
                     <q-btn color="primary" icon="check" label="Choose" @click="addPlan(plan)" />
                 </q-card-section>
             </q-card-section>
@@ -49,20 +49,54 @@
         </q-card>
     </q-dialog>
 
-    <q-dialog   v-model="previewDialog" persistent>
+    <q-dialog v-model="previewDialog" persistent>
         <q-card>
             <q-toolbar class="bg-purple text-white">
                 <q-btn flat round dense icon="assignment_ind" />
                 <q-toolbar-title>
                     Preview
                 </q-toolbar-title>
-                <q-btn v-close-popup flat round dense icon="close" class="q-mr-xs" />  
+                <q-btn v-close-popup flat round dense icon="close" class="q-mr-xs" />
             </q-toolbar>
             <q-card-section class="row items-center">
-                 <q-date v-model="dateRang" range />
+                <q-date v-model="dateRang" range />
+                 <div   class="w-10/12"  >
+            <q-item class="rounded-xl border-1 bg-white shadow-xl mt-2">
+                <q-item-section avatar>
+                    <i class="em em-calendar text-xl" aria-role="presentation" aria-label="TEAR-OFF CALENDAR"></i>
+                </q-item-section>
+                <q-item-section>
+                    <q-item-label :class="`text-${listChoosePlan.color}-600 font-bold`"></q-item-label>
+                    <q-item-label caption> 
+                        <span class="text-base font-bold text-black">
+                            {{ listChoosePlan.name }}</span> <br>
+                        <span class="text-sm  text-black">
+                           Coach : {{ listChoosePlan.coach_name }}</span><br>
+                            <span class="text-sm   text-black">
+                           Number Days : {{ listChoosePlan.number_day }} </span>
+                    </q-item-label>
+                </q-item-section>
+            </q-item>
+        </div>
+
+                <div v-for="(data, i) in listChoosePlan.program" :key="i" class="w-10/12 pl-6">
+                    <q-item class="rounded-xl border-1 bg-white shadow-xl mt-2">
+                        <q-item-section avatar>
+                            <i :class="`text-${data.color}-600`" class="mdi mdi-run-fast text-xl" aria-role="presentation" aria-label="TEAR-OFF CALENDAR"></i>
+                        </q-item-section>
+                        <q-item-section>
+                            <q-item-label :class="`text-${data.color}-600`">{{ data.mode }} </q-item-label>
+                            <q-item-label caption>
+                                <span class="text-base font-bold text-black">
+                                    {{ data.name }}</span>
+                            </q-item-label>
+                        </q-item-section>
+                    </q-item>
+                </div>
+
             </q-card-section>
             <q-card-actions align="right">
-      
+
             </q-card-actions>
         </q-card>
     </q-dialog>
@@ -77,19 +111,21 @@ import { Vue, Component } from 'vue-property-decorator';
 import { Core } from '../../store/core'
 import { Auth } from '../../store/auth'
 import _ from 'lodash'
+import { Tool } from '../../store/tool'
+
 @Component({
     components: {}
 })
 export default class PageIndex extends Vue {
     planDialog: any = false
-    previewDialog:boolean = false  
-    listChoosePlan: any = []
+    previewDialog: boolean = false
+    listChoosePlan: any = {}
     form: any = {
-        plan: []
+        plan: {}
     }
     plans: any = null
     user: any = {}
-     dateRang: any = { from: '2020/07/08', to: '2020/07/17' }
+    dateRang: any = { from: '2020/07/08', to: '2020/07/17' }
     async created() {
         this.user = await Auth.getUser();
         await this.getPlan();
@@ -98,12 +134,13 @@ export default class PageIndex extends Vue {
     }
 
     async getPlan() {
-        this.plans = await Core.getHttp(`/api/exercise/plan/`)
+        this.plans = await Core.getHttp(`/api/exercise/planall/`)
     }
 
     async addPlan(plan: any) {
-        this.form.plan.push(plan.id)
-        this.listChoosePlan.push(plan)
+        this.form.plan = plan.id
+        await this.getDefaultPlan(plan.id)
+
         this.planDialog = false;
 
     }
@@ -119,13 +156,19 @@ export default class PageIndex extends Vue {
         let goal = await Core.getHttp(`/api/exercise/goal/?user=${this.user.id}`)
         if (goal[0]) {
             this.form = goal[0]
-            await this.getDefaultPlan(this.form.id)
+            await this.getDefaultPlan(this.form.plan)
         }
     }
 
-    async getDefaultPlan(id: []) {
-        let currentPlan = _.filter(this.plans, (v) => _.indexOf(id, v.id) === -1)
-        this.listChoosePlan = currentPlan
+    async getDefaultPlan(id: number) {
+
+        let currentPlan = _.find(this.plans, { id: id })
+        let program = currentPlan.program
+
+        program = _.map(program, (element) => {
+            return _.extend({}, element, Tool.getStringDifficulty(element.difficulty));
+        });
+        this.listChoosePlan = Object.assign(currentPlan, { program: program })
     }
 };
 </script>

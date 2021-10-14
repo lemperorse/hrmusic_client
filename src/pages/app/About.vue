@@ -7,7 +7,7 @@
         </div>
         <h1 class="text-3xl font-bold">Heart Exercise</h1>
         <span>Application for exercise with music</span>
-        <span class="mt-4 font-bold">Version Alpha0.1a</span>
+        <span class="mt-4 font-bold">Version Alpha0.1b</span>
          <span class="mt-4 font-bold">Copyright 2021 © Nattapon Kumyaito</span>
     </div>
 

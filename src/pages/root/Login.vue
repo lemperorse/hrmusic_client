@@ -37,7 +37,7 @@ import { Vue, Component } from 'vue-property-decorator';
  
 import { Core } from '../../store/core'
 import { Auth } from '../../store/auth'
-
+import { Facebook } from '../../store/facebook'
 @Component({
     components: {}
 })
@@ -49,7 +49,7 @@ export default class LoginPage extends Vue {
     }
     async facebookLogin() {
        
-     
+        await Facebook.login()
     }
 
     async getLogin() {

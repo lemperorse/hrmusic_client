@@ -8,7 +8,7 @@
                  Heart Exercise
             </q-toolbar-title>
 
-            <div>Alpha v0.1a</div>
+            <div>Alpha v0.1b</div>
         </q-toolbar>
     </q-header>
 
@@ -50,12 +50,12 @@ const linksData = [{
         icon: 'em em-calendar',
         link: '/app/calendar'
     },
-    {
-        title: 'Pace Zone',
-        caption: 'Running in zone',
-        icon: 'em em-man-running',
-        link: '/app/pace'
-    },
+    // {
+    //     title: 'Pace Zone',
+    //     caption: 'Running in zone',
+    //     icon: 'em em-man-running',
+    //     link: '/app/pace'
+    // },
     {
         title: 'Goal',
         caption: 'Setting my goal',

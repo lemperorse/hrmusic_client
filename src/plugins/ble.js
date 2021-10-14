@@ -1,4 +1,4 @@
 
-let bluetooth = ble
+let bluetooth = {} //ble
 
 export { bluetooth }

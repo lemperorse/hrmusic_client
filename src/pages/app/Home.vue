@@ -18,26 +18,26 @@
         </div>
 
         <div class="p-2 flex w-full justify-center items-center ">
-            <div class="w-1/2  p-2">
+            <div class="w-7/12  p-2">
                 <q-item class="rounded-xl border-1 bg-gray-200">
                     <q-item-section avatar>
                         <i class="em em-heartbeat text-4xl" aria-role="presentation" aria-label="BEATING HEART"></i>
                     </q-item-section>
                     <q-item-section>
-                        <q-item-label>Music BPM</q-item-label>
+                        <q-item-label><span class="text-xs">Music / Hrart</span></q-item-label>
                         <q-item-label caption>
-                            <span class="text-xl font-bold text-black"> 80</span>
+                            <span class="text-base font-bold text-black"> 80/70 <span class="font-thin text-xs">bpm.</span></span>
                         </q-item-label>
                     </q-item-section>
                 </q-item>
             </div>
-            <div class="w-1/2 p-2 ">
+            <div class="w-5/12 p-2 ">
                 <q-item class="rounded-xl border-1 bg-gray-200">
                     <q-item-section avatar>
                         <i class="em em-man-running  text-4xl" aria-role="presentation" aria-label=""></i>
                     </q-item-section>
                     <q-item-section>
-                        <q-item-label>Place Zone</q-item-label>
+                        <q-item-label>Zone</q-item-label>
                         <q-item-label caption>
                             <span class="text-xl font-bold text-black"> 2</span>
                         </q-item-label>
@@ -59,7 +59,7 @@
             </div>
 
         </div>
-
+<br><br>
     </div>
 
 </q-page>
