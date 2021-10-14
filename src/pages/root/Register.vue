@@ -38,7 +38,7 @@
 </script><script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { Core } from '../../store/core'
-
+import { Alert } from '../../store/alert'
 @Component({
     components: {}
 })
@@ -51,7 +51,8 @@ export default class PageIndex extends Vue {
             alert('Register Success')
             await this.$router.go(-1)
         }else{
-            alert('Cannot Regitser')
+            Alert.openAlert("error", 'Cannot Regitser','')
+            // alert('Cannot Regitser')
         }
     }
 };
