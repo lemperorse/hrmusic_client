@@ -2,11 +2,12 @@ import { VuexModule, Module, Mutation, Action } from "vuex-class-modules";
 import { Core } from "./core";
 import * as moment from 'moment';
 import * as _ from 'lodash'
+const MM:any = moment
 @Module({ generateMutationSetters: true })
 class ToolModules extends VuexModule {
 
     countDate(startDate:string,num:number){
-        var endDate:any = moment(startDate, "YYYY-MM-DD").add(num, 'days').format('YYYY-MM-DD')
+        var endDate:any = MM(startDate, "YYYY-MM-DD").add(num, 'days').format('YYYY-MM-DD')
          
         return {
             "start" : startDate,

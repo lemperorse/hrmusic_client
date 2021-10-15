@@ -71,11 +71,12 @@ import { bluetooth } from '../../plugins/ble'
 import { Blex } from '../../store/bluetooth'
 const serviceUUID = '180d'
 const characteristicUUID = '2a37'
+const BLE:any = bluetooth
 @Component({
     components: {}
 })
 export default class Bluetooth extends Vue {
-
+    
     gg: any = cordova.plugins
     list: any = []
     SCAN: boolean = false;
@@ -91,9 +92,9 @@ export default class Bluetooth extends Vue {
         this.SCAN = true;
         alert('Are You Sure to Scan');
         await navigator.geolocation.getCurrentPosition((r: any) => { console.log(r) }, (e: any) => { console.log(e) });
-        bluetooth.enable();
+        BLE.enable();
 
-        bluetooth.startScan([serviceUUID], (device: any) => {
+        BLE.startScan([serviceUUID], (device: any) => {
             console.log(JSON.stringify(device));
             this.list.push(device)
         }, (error: any) => {
@@ -101,7 +102,7 @@ export default class Bluetooth extends Vue {
 
         });
 
-        setTimeout(bluetooth.stopScan,
+        setTimeout(BLE.stopScan,
             15000,
             () => {
                 this.SCAN = false;
@@ -115,12 +116,12 @@ export default class Bluetooth extends Vue {
     }
 
     async stopScan() {
-        await bluetooth.stopScan
+        await BLE.stopScan
         this.SCAN = false;
     }
 
     async connectDevice(device: any) {
-        bluetooth.connect(device.id, async () => {
+        BLE.connect(device.id, async () => {
             this.CURRENT_DEVICE = device;
             await Blex.setDevice(device);
             alert('Connect Success')
@@ -129,7 +130,7 @@ export default class Bluetooth extends Vue {
     }
 
     async disConnectDevice(device: any) {
-        bluetooth.disconnect(device.id, async() => {
+        BLE.disconnect(device.id, async() => {
             this.CURRENT_DEVICE = null;
             await Blex.removeDevice();
             alert('Disconnect Success')

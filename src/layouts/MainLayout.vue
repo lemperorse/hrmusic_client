@@ -31,7 +31,11 @@
 import EssentialLink from 'components/EssentialLink.vue'
 import { Core } from '../store/core'
 import { Auth } from '../store/auth'
-
+import { bluetooth } from '../plugins/ble'
+import { Blex } from '../store/bluetooth'
+const serviceUUID = '180d'
+const characteristicUUID = '2a37'
+const BLE:any = bluetooth
 const linksData = [{
         title: 'Home', 
         caption: 'Recoard Activity',
@@ -93,6 +97,7 @@ export default class MainLayout extends Vue {
         this.user = await Auth.setUser();
         await this.checkUser();
         this.response = (this.user.id) ? true : false;
+        await Blex.getConnectOld()
     }
 
        async checkUser() {

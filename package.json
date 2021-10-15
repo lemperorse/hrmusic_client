@@ -2,7 +2,7 @@
   "name": "test_ble_login",
   "version": "0.0.1",
   "description": "A Quasar Framework app",
-  "productName": "Quasar App",
+  "productName": "Heart Music",
   "author": "Pongv",
   "private": true,
   "scripts": {
