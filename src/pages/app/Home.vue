@@ -8,7 +8,7 @@
 
     <div class="p-4">
         <h2 class="text-sm">Mon 17 Sep 2021</h2>
-        <h2 class="font-bold text-xl">Running Detail</h2>
+        <h2 class="font-bold text-xl">Running Detail </h2>
     </div>
     <div class="flex flex-col justify-center items-center  ">
 

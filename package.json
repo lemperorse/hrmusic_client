@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "test": "echo \"No test specified\" && exit 0",
-    "android": "quasar dev -m cordova -T android",
+    "android": "quasar build -m cordova -T android",
     "ios": "quasar dev -m cordova -T ios"
   },
   "dependencies": {

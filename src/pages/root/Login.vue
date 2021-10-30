@@ -50,6 +50,17 @@ export default class LoginPage extends Vue {
     async facebookLogin() {
        
         await Facebook.login()
+        await this.getFacebookUser()
+         await this.getFacebookUser()
+    }
+
+    async getFacebookUser(){
+  let user = Facebook.USER
+
+  if(user.formLog){
+        await alert(JSON.stringify(user))
+  }
+        
     }
 
     async getLogin() {

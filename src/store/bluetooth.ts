@@ -66,6 +66,7 @@ class BlexModule extends VuexModule {
             characteristicUUID,
             () => { 
                 this.DATA = null
+                
               console.log('stop notification success')
             },
             () => {
