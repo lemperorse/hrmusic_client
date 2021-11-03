@@ -19,7 +19,7 @@ class AuthModule extends VuexModule {
     return user;
   }
 
-  public async login(form: any) {
+  public async login(form: any,alert:boolean = true) {
     await this.reToken();
     let user = await Core.postHttp(`/auth/login/`, form)
     if (user.key) {
@@ -30,7 +30,11 @@ class AuthModule extends VuexModule {
       //  await window.location.replace("/");
       return key
     } else {
-      Alert.openAlert("error", 'ไม่สามารถเข้าสู่ระบบได้', 'กรุณาตรวจสอบข้อมูลให้ถูกต้อง')
+      if(alert){
+        Alert.openAlert("error", 'ไม่สามารถเข้าสู่ระบบได้', 'กรุณาตรวจสอบข้อมูลให้ถูกต้อง')
+      }
+      return false;
+   
       // alert('ไม่สามารถเข้าสู่ระบบได้กรุณาตรวจสอบข้อมูลให้ถูกต้อง')
     }
   }

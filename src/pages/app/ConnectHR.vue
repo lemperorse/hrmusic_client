@@ -158,9 +158,9 @@
   </q-page>
 </template>
 
-<script lang="ts">
+<script lang="ts"> 
 import { Vue, Component } from "vue-property-decorator";
-import { bluetooth } from "../../plugins/ble";
+import { bluetooth }from "../../plugins/ble";
 import { Blex } from "../../store/bluetooth";
 import { Alert } from "../../store/alert";
 const serviceUUID = "180d";

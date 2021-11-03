@@ -1,11 +1,13 @@
 
-let fb = null
+let FACECOOK_CONNECT = null
 try {
-  fb  = (facebookConnectPlugin)?facebookConnectPlugin:null
+  FACECOOK_CONNECT  = (facebookConnectPlugin)?facebookConnectPlugin:null
 
 } catch (error) {
-    fb  = {}
+  FACECOOK_CONNECT  = null
 
 }
+
+const fb = FACECOOK_CONNECT
 
 export { fb }

@@ -1,6 +1,6 @@
 import { VuexModule, Module, Mutation, Action } from "vuex-class-modules";
 import { Core } from "./core";
-import { bluetooth } from '../plugins/ble'
+import { bluetooth }from '../plugins/ble'
 
 const serviceUUID = '180d'
 const characteristicUUID = '2a37'

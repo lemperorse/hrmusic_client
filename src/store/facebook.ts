@@ -1,25 +1,32 @@
 import { VuexModule, Module, Mutation, Action } from "vuex-class-modules";
 import { Core } from "./core";
-import { fb } from '../plugins/facebook'
+import  {fb} from '../plugins/facebook'
 
-const FB:any = fb
+let FB:any = fb
 @Module({ generateMutationSetters: true })
 class FacebookModules extends VuexModule {
     public USER:any = null
-    async login() {
+    public FACEBOOK_TOKEN = (localStorage.getItem('facebook_token'))?localStorage.getItem('facebook_token'):null
+    async login() {   
         
-       let user =  await FB.login(["public_profile", "user_birthday"], async (r: any) => {
-            let data = r.authResponse
-            let resUser = await this.getProfile(data.accessToken)
-            this.USER = resUser
-            return resUser;
-            //alert(JSON.stringify(r.authResponse))
+       let loginning =  await FB.login(["public_profile", "user_birthday"], async (r: any) => {
+            let data = r.authResponse 
+            await localStorage.setItem('facebook_token',data.accessToken)
+            await location.reload() 
+            return true; 
         }, (e: any) => {
             alert(JSON.stringify(e))
             return null
-        }) 
-        
-        return user;
+        })  
+        return loginning;
+    }
+
+    async getUserWhenLogin(){
+        if(this.FACEBOOK_TOKEN){ 
+            return await this.getProfile(this.FACEBOOK_TOKEN)
+        }else {
+            return null
+        }
     }
 
     async getProfile(token:any){
@@ -31,13 +38,13 @@ class FacebookModules extends VuexModule {
                 first_name:  user.first_name,
                 last_name: user.last_name,
                 email:`${user.id}@facebook.com`,
-                user_name:user.id,
+                username:user.id,
                 password:btoa(user.id),
-                password_password_confirm:btoa(user.id)
+                password_confirm:btoa(user.id)
             }
 
             formLog = {
-                user_name:user.id,
+                username:user.id,
                 password:btoa(user.id),
             }
             // alert(JSON.stringify({

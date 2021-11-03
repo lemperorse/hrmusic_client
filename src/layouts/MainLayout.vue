@@ -31,7 +31,7 @@
 import EssentialLink from 'components/EssentialLink.vue'
 import { Core } from '../store/core'
 import { Auth } from '../store/auth'
-import { bluetooth } from '../plugins/ble'
+import { bluetooth }from '../plugins/ble'
 import { Blex } from '../store/bluetooth'
 const serviceUUID = '180d'
 const characteristicUUID = '2a37'

@@ -1,8 +1,10 @@
 
-let bluetooth = null
+let BLUETOOTH_CONNECT = null
 try {
-    bluetooth = ble
+    BLUETOOTH_CONNECT = ble
 } catch (error) {
-    bluetooth = null
+    BLUETOOTH_CONNECT = null
 }
+
+const bluetooth = BLUETOOTH_CONNECT
 export { bluetooth }

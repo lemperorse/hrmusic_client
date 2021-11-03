@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "test": "echo \"No test specified\" && exit 0",
-    "android": "quasar build -m cordova -T android",
+    "android": "quasar dev -m cordova -T android",
     "ios": "quasar dev -m cordova -T ios"
   },
   "dependencies": {
@@ -27,8 +27,7 @@
   "devDependencies": {
     "@quasar/app": "^2.0.0",
     "@quasar/quasar-app-extension-qcalendar": "^3.4.1",
-    "@types/node": "^10.17.15",
-    "@types/ramda": "github:types/npm-ramda"
+    "@types/node": "^10.17.15" 
   },
   "browserslist": [
     "last 10 Chrome versions",

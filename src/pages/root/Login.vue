@@ -34,10 +34,12 @@
 
 </script><script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
- 
+
 import { Core } from '../../store/core'
 import { Auth } from '../../store/auth'
 import { Facebook } from '../../store/facebook'
+import { Alert } from '../../store/alert'
+
 @Component({
     components: {}
 })
@@ -46,37 +48,61 @@ export default class LoginPage extends Vue {
     form: any = {}
     async created() {
         await this.checkUser();
+        await this.callbackFacebook();
+
     }
     async facebookLogin() {
-       
         await Facebook.login()
-        await this.getFacebookUser()
-         await this.getFacebookUser()
     }
 
-    async getFacebookUser(){
-  let user = Facebook.USER
+    async callbackFacebook() {
+        let user: any = await Facebook.getUserWhenLogin();
+        if (user.formReg && user.formLog) {
+            let logined = await Auth.login(user.formLog, false);
+            if (logined) {
+                 this.form = user.formLog
+                 await this.getLogin();
+            } else {
+                this.form = user.formReg
+                await this.register()
+            }
 
-  if(user.formLog){
-        await alert(JSON.stringify(user))
-  }
-        
+        }
+    }
+
+    async getFacebookUser() {
+        let user = Facebook.USER
+        if (user.formLog) {
+            await alert(JSON.stringify(user))
+        }
     }
 
     async getLogin() {
         await Auth.login(this.form);
         let user = await Auth.getUser();
         if (user.id) {
-            //await location.reload();
             await this.$router.replace('/app/home/')
             await location.reload();
-        }
+           
+        }  
     }
 
     async checkUser() {
         let user = await Auth.getUser();
         if (user.id) {
             await this.$router.replace('/app/home/')
+        }
+    }
+
+    async register() {
+        let reg = await Core.postHttp(`/auth-reg/register/`, this.form);
+        if (reg.id) {
+            // alert('Register Success')
+            Alert.openAlert("success", "Register Success", "");
+            await this.$router.go(-1);
+        } else {
+            Alert.openAlert("error", "Cannot Regitser", "");
+            // alert('Cannot Regitser')
         }
     }
 };
