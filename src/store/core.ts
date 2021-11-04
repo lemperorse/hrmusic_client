@@ -5,6 +5,7 @@ class CoreModule extends VuexModule {
     //state
     private token: string | null = null;
     public Hi:String | null = null;
+    public DARK:boolean = false
 
 
     async getHttp(url:string):Promise<any>{

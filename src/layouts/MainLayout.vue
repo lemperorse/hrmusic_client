@@ -21,12 +21,12 @@
         </q-list>
     </q-drawer>
 
-    <q-page-container class="bg-black">
+    <q-page-container :class="(dark)?`bg-black`:`bg-white`"  >
         <router-view />
     </q-page-container>
     <q-footer class=" bg-transparent ">
-        <div class="  sticky bottom-2  p-5 px-6 p-2  flex items-center justify-between   bg-black shadow-3xl text-gray-400 rounded-2xl cursor-pointer">
-            <div class="flex flex-col items-center transition ease-in duration-200 hover:text-blue-400 bg-black " @click="$router.push('/app/profile')">
+        <div :class="(dark)?`bg-black`:`bg-white`" class="  sticky bottom-2  p-5 px-6 p-2  flex items-center justify-between   shadow-3xl text-gray-400 rounded-2xl cursor-pointer">
+            <div class="flex flex-col items-center transition ease-in duration-200 hover:text-blue-400   " @click="$router.push('/app/profile')">
                 <span class="mdi mdi-account-circle text-xl"></span>
                 <span>Profile</span>
 
@@ -35,9 +35,9 @@
                 <span class="mdi mdi-calendar  text-xl"></span>
                 <span>Calendar</span>
             </div>
-            <div class="flex flex-col items-center  hover:text-blue-400 " @click="$router.push('/app/home')">
-                <div class="absolute bottom-5 shadow-2xl text-center flex items-center justify-center rounded-full border-4 text-3xl border-gray-50 hover:border-blue-500 bg-blue-500 w-20 h-20 p-2 text-white transition ease-in duration-200 ">
-                    <i class="em em-man-running  text-xl" aria-role="presentation" aria-label=""></i> 
+            <div class="flex flex-col items-center   " @click="$router.push('/app/home')">
+                <div class="absolute bottom-5 shadow-2xl text-center flex items-center justify-center rounded-full border-4 text-3xl border-gray-50   bg-blue-400 w-20 h-20 p-2 text-white transition ease-in duration-200 ">
+                    <i class="em em-man-running  text-3xl" aria-role="presentation" aria-label=""></i> 
                 </div>
             </div>
             <div class="flex flex-col items-center transition ease-in duration-200 hover:text-blue-400 ml-4" @click="$router.push('/app/connect')">
@@ -61,6 +61,7 @@ import { Core } from '../store/core'
 import { Auth } from '../store/auth'
 import { bluetooth } from '../plugins/ble'
 import { Blex } from '../store/bluetooth'
+
 const serviceUUID = '180d'
 const characteristicUUID = '2a37'
 const BLE: any = bluetooth
@@ -114,6 +115,7 @@ import { Vue, Component } from 'vue-property-decorator';
     components: { EssentialLink }
 })
 export default class MainLayout extends Vue {
+    private dark:boolean = Core.DARK
     leftDrawerOpen = false;
     essentialLinks = linksData;
     user: any = null
