@@ -1,16 +1,16 @@
 <template>
 <q-layout view="lHh Lpr lFf" v-if="response">
-    <q-header elevated>
+    <!-- <q-header elevated>
         <q-toolbar>
             <q-btn flat dense round icon="menu" aria-label="Menu" @click="leftDrawerOpen = !leftDrawerOpen" />
 
             <q-toolbar-title>
-                 Heart Exercise
+                Heart Exercise
             </q-toolbar-title>
 
             <div>Alpha v0.1b</div>
         </q-toolbar>
-    </q-header>
+    </q-header> -->
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered content-class="bg-grey-1">
         <q-list>
@@ -21,9 +21,37 @@
         </q-list>
     </q-drawer>
 
-    <q-page-container>
+    <q-page-container class="bg-black">
         <router-view />
     </q-page-container>
+    <q-footer class=" bg-transparent ">
+        <div class="  sticky bottom-2  p-5 px-6 p-2  flex items-center justify-between   bg-black shadow-3xl text-gray-400 rounded-2xl cursor-pointer">
+            <div class="flex flex-col items-center transition ease-in duration-200 hover:text-blue-400 bg-black " @click="$router.push('/app/profile')">
+                <span class="mdi mdi-account-circle text-xl"></span>
+                <span>Profile</span>
+
+            </div>
+            <div class="flex flex-col items-center transition ease-in duration-200 hover:text-blue-400  mr-4" @click="$router.push('/app/calendar')" >  
+                <span class="mdi mdi-calendar  text-xl"></span>
+                <span>Calendar</span>
+            </div>
+            <div class="flex flex-col items-center  hover:text-blue-400 " @click="$router.push('/app/home')">
+                <div class="absolute bottom-5 shadow-2xl text-center flex items-center justify-center rounded-full border-4 text-3xl border-gray-50 hover:border-blue-500 bg-blue-500 w-20 h-20 p-2 text-white transition ease-in duration-200 ">
+                    <i class="em em-man-running  text-xl" aria-role="presentation" aria-label=""></i> 
+                </div>
+            </div>
+            <div class="flex flex-col items-center transition ease-in duration-200 hover:text-blue-400 ml-4" @click="$router.push('/app/connect')">
+                <span class="mdi mdi-bluetooth  text-xl"></span>
+                <span>Devices</span>
+
+            </div>
+            <div class="flex flex-col items-center transition ease-in duration-200 hover:text-blue-400 "  @click="leftDrawerOpen = !leftDrawerOpen">
+                <span class="mdi mdi-apps  text-xl"></span>
+                <span>Menu</span>
+            </div>
+        </div>
+    </q-footer>
+
 </q-layout>
 </template>
 
@@ -31,23 +59,23 @@
 import EssentialLink from 'components/EssentialLink.vue'
 import { Core } from '../store/core'
 import { Auth } from '../store/auth'
-import { bluetooth }from '../plugins/ble'
+import { bluetooth } from '../plugins/ble'
 import { Blex } from '../store/bluetooth'
 const serviceUUID = '180d'
 const characteristicUUID = '2a37'
-const BLE:any = bluetooth
+const BLE: any = bluetooth
 const linksData = [{
-        title: 'Home', 
+        title: 'Home',
         caption: 'Recoard Activity',
-        icon: 'em em-sparkling_heart', 
+        icon: 'em em-sparkling_heart',
         link: '/app/home'
-    }, 
+    },
     {
         title: 'Profile',
         caption: 'Setting My Account',
         icon: 'em em-male-astronaut',
         link: '/app/profile'
-    }, 
+    },
     {
         title: 'Calendar',
         caption: 'View Training Date',
@@ -64,19 +92,19 @@ const linksData = [{
         title: 'Goal',
         caption: 'Setting my goal',
         icon: 'em em-triangular_flag_on_post',
-        link: '/app/goal' 
+        link: '/app/goal'
     },
     {
         title: 'Devices',
         caption: 'Connect HeartRate Device',
         icon: 'mdi mdi-bluetooth',
-        link: '/app/connect' 
+        link: '/app/connect'
     },
     {
         title: 'About',
         caption: 'Application Info',
         icon: 'em em-information_source',
-        link: '/app/about' 
+        link: '/app/about'
     }
 ];
 
@@ -92,7 +120,7 @@ export default class MainLayout extends Vue {
     response: boolean = false;
     drawer: any = null
 
-       async created() {
+    async created() {
         await Auth.checkToken();
         this.user = await Auth.setUser();
         await this.checkUser();
@@ -100,7 +128,7 @@ export default class MainLayout extends Vue {
         await Blex.getConnectOld()
     }
 
-       async checkUser() {
+    async checkUser() {
         let user = await Auth.getUser();
         if (!user.id) {
             await this.$router.replace(`/`)
