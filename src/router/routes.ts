@@ -23,6 +23,7 @@ const routes: RouteConfig[] = [
       { path: 'profile/', component: () => import('pages/app/Profile.vue') },
       { path: 'preview/', component: () => import('pages/app/Preview.vue') },
       { path: 'setting/', component: () => import('pages/app/Setting.vue') },
+      { path: 'running/', component: () => import('pages/app/Running.vue') },
     ]
   },
 

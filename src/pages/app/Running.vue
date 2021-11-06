@@ -1,5 +1,19 @@
 <template>
 <q-page class="bg-main">
+
+    <div class="flex flex-col   p-4  ">
+        <div class="flex w-full">
+              <q-btn  flat color="primary" icon="west" label="Back to Dashboard"  @click="$router.go(-1)" />
+            <q-space />
+            <q-btn flat class="flex  " :class="t">
+                <i class="em em-hearts" aria-role="presentation" aria-label="BLACK HEART SUIT"></i>
+                <span class="ml-2">{{bleData}} bpm </span>
+            </q-btn>
+            <!-- <q-avatar>
+                        <img src="https://cdn.quasar.dev/img/avatar.png">
+                    </q-avatar> -->
+        </div>
+    </div>
     <gmap-map :options="{streetViewControl : false,}" :center="center" :zoom="15" ref="mainmap" style="width: 100%; height: 16rem" class="mrt-10">
         <gmap-polyline :path="path" :editable="false" ref="polyline" />
 
@@ -7,59 +21,59 @@
     </gmap-map>
 
     <div class="p-4">
-        <h2 class="text-sm">Mon 17 Sep 2021</h2>
-        <h2 class="font-bold text-xl">Running Detail </h2>
+        <h2 :class="t" class="text-sm">{{myGoal.race_date}}</h2>
+        <h2  :class="t"  class="font-bold text-xl">{{myPlan.name}} </h2>
     </div>
     <div class="flex flex-col justify-center items-center  ">
 
         <div class="w-32 h-32 flex flex-col justify-center items-center rounded-full border border-red-500">
             <i class="em em-heart text-4xl" aria-role="presentation" aria-label="HEAVY BLACK HEART"></i>
-            <h2 class="text-xl">{{bleData}} bpm</h2>
+            <h2 :class="t" class="text-xl">{{bleData}} bpm</h2>
         </div>
 
         <div class="p-2 flex w-full justify-center items-center ">
             <div class="w-7/12  p-2">
-                <q-item class="rounded-xl border-1 bg-gray-200">
+                <q-item :class="bg " class="rounded-xl border-1 bg-gray-200">
                     <q-item-section avatar>
                         <i class="em em-heartbeat text-4xl" aria-role="presentation" aria-label="BEATING HEART"></i>
                     </q-item-section>
                     <q-item-section>
-                        <q-item-label><span class="text-xs">Music / Hrart</span></q-item-label>
+                        <q-item-label><span :class="t" class="text-xs">Music / Hrart</span></q-item-label>
                         <q-item-label caption>
-                            <span class="text-base font-bold text-black"> 80/70 <span class="font-thin text-xs">bpm.</span></span>
+                            <span :class="t" class="text-base font-bold  "> 80/70 <span class="font-thin text-xs">bpm.</span></span>
                         </q-item-label>
                     </q-item-section>
                 </q-item>
             </div>
             <div class="w-5/12 p-2 ">
-                <q-item class="rounded-xl border-1 bg-gray-200">
+                <q-item :class="bg " class="rounded-xl border-1 bg-gray-200">
                     <q-item-section avatar>
                         <i class="em em-man-running  text-4xl" aria-role="presentation" aria-label=""></i>
                     </q-item-section>
                     <q-item-section>
-                        <q-item-label>Zone</q-item-label>
+                        <q-item-label :class="t">Zone</q-item-label>
                         <q-item-label caption>
-                            <span class="text-xl font-bold text-black"> 2</span>
+                            <span :class="t" class="text-xl font-bold  "> 2</span>
                         </q-item-label>
                     </q-item-section>
                 </q-item>
             </div>
             <div class="w-full p-2 ">
-                <q-item class="rounded-xl border-1 bg-gray-200">
+                <q-item :class="bg " class="rounded-xl border-1  ">
                     <q-item-section avatar>
                         <i class="em em-musical_note text-4xl" aria-role="presentation" aria-label="MUSICAL NOTE"></i>
                     </q-item-section>
                     <q-item-section>
-                        <q-item-label>Music</q-item-label>
+                        <q-item-label :class="t">Music</q-item-label>
                         <q-item-label caption>
-                            <span class="text-base font-bold text-black"> Super Bass-Nicki minaj</span>
+                            <span :class="t" class="text-base font-bold  "> Super Bass-Nicki minaj</span>
                         </q-item-label>
                     </q-item-section>
                 </q-item>
             </div>
 
         </div>
-<br><br>
+        <br><br>
     </div>
 
 </q-page>
@@ -70,6 +84,9 @@
 </script><script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { Blex } from '../../store/bluetooth'
+import { Core } from '../../store/core'
+import { Auth } from '../../store/auth'
+import moment from 'moment' 
 
 @Component({
     components: {}
@@ -93,6 +110,46 @@ export default class PageIndex extends Vue {
         lat: 19.0479638,
         lng: 99.8753085
     }]
+
+    private dark: boolean = Core.DARK
+    private user: any = Auth.user
+    get t() {
+        return (!this.dark) ? `text-black` : `text-white`
+    }
+    get bg() {
+        return (this.dark) ? `bg-grey-10` : `bg-white`
+    }
+    get t_gray() {
+        return (!this.dark) ? `text-gray-600` : `text-gray-300`
+    }
+    get t_gray_xl() {
+        return (!this.dark) ? `text-black` : `text-gray-600`
+    }
+
+
+     listGoals:any = []
+    listProgram:any = []
+    response:boolean = false
+    myPlan:any = {}
+    myGoal:any = {}
+       async created() {
+        this.listGoals = await Core.getHttp(`/api/exercise/goalall/?user=${this.user.id}`) 
+        if (this.listGoals.length >= 1) {
+            await this.getMyGoal() 
+            this.response = true
+        }
+    }
+
+
+      async getMyGoal() {
+        this.myGoal = this.listGoals[this.listGoals.length - 1]
+        this.myPlan = this.myGoal.plan
+        this.listProgram = this.myPlan.program
+         let dateSource = moment(this.myGoal.race_date).subtract(this.listProgram.length, 'days');
+        this.myGoal.race_date_out = dateSource.format('YYYY/MM/DD')
+        this.myGoal.race_date = moment(this.myGoal.race_date).format('YYYY/MM/DD')
+    }
+  
 
 };
 </script>

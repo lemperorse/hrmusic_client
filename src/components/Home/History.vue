@@ -87,7 +87,7 @@ export default class Goal extends Vue {
     response: boolean = false
     myPlan: any = {}
     myGoal: any = {}
-    goalDialog: boolean = true
+    goalDialog: boolean = false
     async created() {
         this.listGoals = await Core.getHttp(`/api/exercise/goalall/?user=${this.user.id}`)
         if (this.listGoals.length >= 1) {

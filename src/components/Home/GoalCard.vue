@@ -1,5 +1,5 @@
 <template>
-<div :class="(dark)?`bg-c-c`:`bg-c-c-w`" class="shadow-dark rounded-xl w-full md:w-96 p-4  ">
+<div :class="(dark)?`bg-c-c`:`bg-c-c-w`" class="shadow-dark rounded-xl w-full md:w-96 p-4  " @click="$router.push('/app/running')">
     <div class="w-full h-full block">
         <div class="flex items-center    py-2">
             <span class="em em-runner text-3xl" aria-role="presentation" aria-label="RUNNER"></span>

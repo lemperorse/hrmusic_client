@@ -7,7 +7,7 @@
                 <div class="flex w-full">
                     <q-btn flat class="flex  " :class="t">
                         <i class="em em-hearts" aria-role="presentation" aria-label="BLACK HEART SUIT"></i>
-                        <span class="ml-2">60 bpm </span>
+                        <span class="ml-2">{{bleData}} bpm </span>
                     </q-btn>
                     <q-space />
                     <!-- <q-avatar>
@@ -36,13 +36,13 @@
                         <h2 :class="t" class="  text-xl font-semibold">Quick Menu</h2>
                         <div class="flex w-full mt-2">
                             <div class="w-1/3  p-1">
-                                <div :class="(dark)?` bg-grey-10 `:` bg-red-300 `" class="shadow-xl rounded   flex flex-col items-center justify-center p-2 ">
+                                <div :class="(dark)?` bg-grey-10 `:` bg-red-300 `" class="shadow-xl rounded   flex flex-col items-center justify-center p-2 " @click="$router.push('/app/pace')">
                                     <span class="em em-revolving_hearts text-2xl" aria-role="presentation" aria-label="REVOLVING HEARTS"></span>
                                     <span :class="t" class="text-gray-400 font-semibold text-xs mt-2">Pace Zone</span>
                                 </div>
                             </div>
                             <div class="w-1/3  p-1">
-                                <div :class="(dark)?` bg-grey-10 `:` bg-purple-300 `" class="shadow-xl rounded    flex flex-col items-center justify-center p-2 ">
+                                <div :class="(dark)?` bg-grey-10 `:` bg-purple-300 `" class="shadow-xl rounded    flex flex-col items-center justify-center p-2 " @click="$router.push('/app/about')">
                                     <span class="em em-card_file_box text-2xl" aria-role="presentation" aria-label="REVOLVING HEARTS"></span>
                                     <span  :class="t"  class=" font-semibold text-xs mt-2">Programs</span>
                                 </div>

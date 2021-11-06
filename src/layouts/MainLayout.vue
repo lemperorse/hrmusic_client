@@ -83,12 +83,12 @@ const linksData = [{
         icon: 'em em-calendar',
         link: '/app/calendar'
     },
-    // {
-    //     title: 'Pace Zone',
-    //     caption: 'Running in zone',
-    //     icon: 'em em-man-running',
-    //     link: '/app/pace'
-    // },
+    {
+        title: 'Pace Zone',
+        caption: 'Running in zone',
+        icon: 'em em-man-running',
+        link: '/app/pace'
+    },
     {
         title: 'Goal',
         caption: 'Setting my goal',
@@ -100,6 +100,12 @@ const linksData = [{
         caption: 'Connect HeartRate Device',
         icon: 'mdi mdi-bluetooth',
         link: '/app/connect'
+    },
+    {
+        title: 'Setting',
+        caption: 'Config Application',
+        icon: 'em em-compression',
+        link: '/app/setting'
     },
     {
         title: 'About',
