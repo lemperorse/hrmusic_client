@@ -1,90 +1,74 @@
 <template>
-<q-page class="">
-    <div class="h-screen flex flex-col items-end" :class="(dark)?`bg-black `:`bg-white`">
-        <div class="w-screen flex-1   mr-4    shadow-xl  " :class="(dark)?`bg-black `:`bg-main`">
-            
-            <div class="flex flex-col   p-4  ">
-                <div class="flex w-full">
-                    <q-btn flat class="flex  " :class="t">
-                        <i class="em em-hearts" aria-role="presentation" aria-label="BLACK HEART SUIT"></i>
-                        <span class="ml-2">60 bpm </span>
-                    </q-btn>
-                    <q-space />
-                    <!-- <q-avatar>
-                        <img src="https://cdn.quasar.dev/img/avatar.png">
-                    </q-avatar> -->
+<div :class="(dark)?`bg-c-c`:`bg-c-c-w`" class="shadow-dark rounded-xl w-full md:w-96 p-4  ">
+    <div class="w-full h-full block">
+        <div class="flex items-center    py-2">
+            <span class="em em-runner text-3xl" aria-role="presentation" aria-label="RUNNER"></span>
+            <div class="pl-3"> 
+                <div class=" font-semibold  text-white text-xl">
+                    {{myPlan.name}}
                 </div>
-
-                <div class="flex flex-col z-10      mt-1 p-4" :class="t"> 
-                    <div class="text-xl mb-2" :class="t"><span class="text-yellow-600 font-semibold">Hello</span>, {{user.first_name}} </div>
-                    <div class="w-full   flex">
-                        <span class="text-3xl font-semibold" :class="t_gray">Goal </span>
-                        <q-space />
-                        <button @click="$router.push('/app/goal')" 
-                        :class="(dark)?` bg-grey-10 text-gray-300`:` bg-yellow-500 text-white`"
-                         class="rounded-full  px-4 "> <i class="em em-first_place_medal" aria-role="presentation" aria-label="FIRST PLACE MEDAL"></i>
-                            <span class="pl-2">New Goal</span></button> 
-                    </div>
+                <div :class="(dark)?`text-blue-500`:`text-white`" class=" text-sm">
+                    {{myPlan.coach_name}}
                 </div>
-
-
-                <div class="   z-10 shadow-md text-sm   p-2"> 
-                    <GoalCard />
-                    
-
-                    <div class="p-4 mt-4">
-                        <h2 :class="t" class="  text-xl font-semibold">Quick Menu</h2>
-                        <div class="flex w-full mt-2">
-                            <div class="w-1/3  p-1">
-                                <div :class="(dark)?` bg-grey-10 `:` bg-red-300 `" class="shadow-xl rounded   flex flex-col items-center justify-center p-2 ">
-                                    <span class="em em-revolving_hearts text-2xl" aria-role="presentation" aria-label="REVOLVING HEARTS"></span>
-                                    <span :class="t" class="text-gray-400 font-semibold text-xs mt-2">Pace Zone</span>
-                                </div>
-                            </div>
-                            <div class="w-1/3  p-1">
-                                <div :class="(dark)?` bg-grey-10 `:` bg-purple-300 `" class="shadow-xl rounded    flex flex-col items-center justify-center p-2 ">
-                                    <span class="em em-card_file_box text-2xl" aria-role="presentation" aria-label="REVOLVING HEARTS"></span>
-                                    <span  :class="t"  class=" font-semibold text-xs mt-2">Programs</span>
-                                </div>
-                            </div>
-                            <div class="w-1/3  p-1">
-                                <div :class="(dark)?` bg-grey-10 `:` bg-blue-300 `" class="shadow-xl rounded  flex flex-col items-center justify-center p-2 " @click="$router.push('/app/about')">
-                                    <span class="em em-loudspeaker text-2xl" aria-role="presentation" aria-label="REVOLVING HEARTS"></span>
-                                    <span  :class="t"  class=" font-semibold text-xs mt-2">About App</span>
-                                </div>
-                            </div>
-                        </div>
-                        <History />
-                      
-                    </div>
-
-                </div>
-
             </div>
+        </div>
+        <div class="w-full h-2 bg-blue-200 rounded-full mt-3">
+            <div class="w-2/3 h-full text-center text-xs text-white bg-blue-600 rounded-full">
+            </div>
+        </div>
+        <div class="w-full mt-2 flex">
+            <span :class="(dark)?`text-blue-500`:`text-white`" class="  text-xs font-medium  ">
+                <span class="font-semibold pr-2">Start</span>: {{myGoal.race_date_out}} 
+            </span>
+            <q-space />
+            <span :class="(dark)?`text-yellow-600`:`text-white`" class=" text-xs font-medium  ">{{listProgram.length}} Programs</span>
 
         </div>
 
     </div>
-
-</q-page>
+</div>
 </template>
-
  <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { Blex } from '../../store/bluetooth'
 import { Core } from '../../store/core'
-import { Auth } from '../../store/auth'
-import GoalCard from '../../components/Home/GoalCard.vue'
-import History from '../../components/Home/History.vue'
-@Component({
-     
+import { Auth } from '../../store/auth' 
+import moment from 'moment' 
+
+@Component({ 
     components: {
-        GoalCard,History
+         
     }
 })
-export default class PageIndex extends Vue {
+export default class Goal extends Vue {
     private dark:boolean = Core.DARK
     private user:any =  Auth.user
+
+    listGoals:any = []
+    listProgram:any = []
+    response:boolean = false
+    myPlan:any = {}
+    myGoal:any = {}
+       async created() {
+        this.listGoals = await Core.getHttp(`/api/exercise/goalall/?user=${this.user.id}`) 
+        if (this.listGoals.length >= 1) {
+            await this.getMyGoal() 
+            this.response = true
+        }
+    }
+
+
+      async getMyGoal() {
+        this.myGoal = this.listGoals[this.listGoals.length - 1]
+        this.myPlan = this.myGoal.plan
+        this.listProgram = this.myPlan.program
+         let dateSource = moment(this.myGoal.race_date).subtract(this.listProgram.length, 'days');
+        this.myGoal.race_date_out = dateSource.format('YYYY/MM/DD')
+    }
+
+
+
+
     get t(){
         return (!this.dark)?`text-black`:`text-white`
     }
@@ -103,18 +87,7 @@ export default class PageIndex extends Vue {
     get DEVICE() {
         return Blex.DEVICE
     }
-    center: any = {
-        lat: 19.0331162,
-        lng: 99.8967806,
-    }
-
-    path: any = [{
-        lat: 19.0331162,
-        lng: 99.8967806,
-    }, {
-        lat: 19.0479638,
-        lng: 99.8753085
-    }]
+  
 
 };
 </script>

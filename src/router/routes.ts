@@ -18,9 +18,11 @@ const routes: RouteConfig[] = [
       { path: 'goal/', component: () => import('pages/app/Goal.vue') },
       { path: 'pace/', component: () => import('src/pages/app/PaceZone.vue') },
       { path: 'calendar/', component: () => import('pages/app/TrainingCalendar.vue') },
+      { path: 'calendar-preview/', component: () => import('pages/app/TrainingPreview.vue') },
       { path: 'about/', component: () => import('pages/app/About.vue') },
       { path: 'profile/', component: () => import('pages/app/Profile.vue') },
       { path: 'preview/', component: () => import('pages/app/Preview.vue') },
+      { path: 'setting/', component: () => import('pages/app/Setting.vue') },
     ]
   },
 

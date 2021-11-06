@@ -5,7 +5,9 @@ class CoreModule extends VuexModule {
     //state
     private token: string | null = null;
     public Hi:String | null = null;
-    public DARK:boolean = false
+    public DARK:boolean =  (localStorage.getItem('dark'))?(localStorage.getItem('dark')=='0')?true:false :false
+
+  
 
 
     async getHttp(url:string):Promise<any>{

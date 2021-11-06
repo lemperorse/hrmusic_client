@@ -1,9 +1,9 @@
 <template>
-<q-page class=" bg-profile">
+<q-page class=" bg-profile pt-6">
 
-    <div class="flex flex-col pl-6  mt-6">
-        <h1 class="text-3xl font-bold">Profile</h1>
-        <span>Setting My Account</span>
+    <div class="flex flex-col pl-6  ">
+        <h1 :class="t" class="text-3xl font-bold">Profile</h1>
+        <span  :class="t">Setting My Account</span>
     </div> 
     <div class="flex flex-col justify-center items-center w-full">
         <form class=" w-full p-4" @submit.prevent="editUser()">
@@ -70,6 +70,22 @@ export default class PageIndex extends Vue {
         await Auth.logout();
         await location.reload();
     }
+
+      private dark:boolean = Core.DARK
+        get t(){
+            return (!this.dark)?`text-black`:`text-white`
+        }
+        get bg(){
+            return (!this.dark)?`bg-black`:`bg-white`
+        }
+        get t_gray(){
+            return (!this.dark)?`text-gray-600`:`text-gray-300`
+        }
+        get t_gray_xl(){
+            return (!this.dark)?`text-black`:`text-gray-600`
+        }
+  
+  
    
 };
 </script>

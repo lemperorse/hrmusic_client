@@ -1,10 +1,10 @@
 <template>
-<q-page class=" bg-goal">
-    <div class="flex flex-col pl-6  mt-6">
-        <h1 class="text-3xl font-bold">Goal</h1>
-        <span>Setting my goal</span>
+<q-page class=" bg-goal pt-6">
+    <div class="flex flex-col pl-6 ">
+        <h1 :class="t" class="text-3xl font-bold">Goal</h1>
+        <span :class="t" >Setting my goal</span>
     </div>
-    <div class="flex flex-col justify-center items-center">
+    <div class="flex flex-col justify-center items-center p-4">
         <form @submit.prevent="saveGoal()">
             <q-select v-model="form.running_distance" :options="[5,10,21,42,100]" color="black" bg-color="white" class="m-1 mt-4" outlined type="text" label="Running distance (km)" />
             <q-input v-model="form.race_date" type="date" color="black" bg-color="white" class="m-1 mt-4" outlined label="Race date" />
@@ -24,8 +24,8 @@
                     </div>
                 </div>
             </div>
-            <div class="flex flex-row justify-around mt-4">
-                <q-btn @click="previewDialog = true" class="m-2" color="orange" icon="mdi-eye" label="Preview" />
+            <div class="flex flex-row justify-around mt-4"> 
+                <q-btn @click="$router.push(`/app/calendar-preview?id=${form.id}`)" class="m-2" color="orange" icon="mdi-eye" label="Preview" />
                 <q-btn type="submit" class="m-2" color="primary" icon="check" label="Set Goal" />
             </div>
         </form>
@@ -127,7 +127,10 @@ export default class PageIndex extends Vue {
     user: any = {}
     dateRang: any = { from: '2020/07/08', to: '2020/07/17' }
     async created() {
-        this.user = await Auth.getUser();
+        await this.init()
+    }
+    async init(){
+         this.user = await Auth.getUser();
         await this.getPlan();
         this.form.user = this.user.id
         await this.getDefaultGoal();
@@ -147,15 +150,17 @@ export default class PageIndex extends Vue {
 
     async saveGoal() {
         let save = await Core.postHttp(`/api/exercise/goal/`, this.form)
+         
         if (save.id) {
             alert("Set Goal Success")
+            await this.init();
         }
     }
 
     async getDefaultGoal() {
         let goal = await Core.getHttp(`/api/exercise/goal/?user=${this.user.id}`)
-        if (goal[0]) {
-            this.form = goal[0]
+        if (goal.length > 0) {
+            this.form = goal[goal.length-1]
             await this.getDefaultPlan(this.form.plan)
         }
     }
@@ -169,6 +174,21 @@ export default class PageIndex extends Vue {
             return _.extend({}, element, Tool.getStringDifficulty(element.difficulty));
         });
         this.listChoosePlan = Object.assign(currentPlan, { program: program })
+    }
+
+
+    private dark: boolean = Core.DARK
+    get t() {
+        return (!this.dark) ? `text-black` : `text-white`
+    }
+    get bg() {
+        return (!this.dark) ? `bg-black` : `bg-white`
+    }
+    get t_gray() {
+        return (!this.dark) ? `text-gray-600` : `text-gray-300`
+    }
+    get t_gray_xl() {
+        return (!this.dark) ? `text-black` : `text-gray-600`
     }
 };
 </script>

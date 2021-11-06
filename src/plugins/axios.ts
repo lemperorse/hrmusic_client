@@ -7,7 +7,7 @@ import axios from "axios";
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 let config = {
-  baseURL: process.env.baseURL || process.env.apiUrl ||   "https://hrmusic.tk" // "http://localhost:8000" // "https://www.le-buffalo.ml" //"http://192.168.1.112:8000" 
+  baseURL: process.env.baseURL || process.env.apiUrl ||  "http://localhost:8000" //"http://192.168.1.112:8000" "https://hrmusic.tk" //    //"https://hrmusic.tk"
   // timeout: 60 * 1000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };
