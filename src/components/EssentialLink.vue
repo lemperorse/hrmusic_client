@@ -5,22 +5,38 @@
     </q-item-section>
 
     <q-item-section>
-        <q-item-label>{{ title }}</q-item-label>
-        <q-item-label caption>
-            {{ caption }}
-        </q-item-label>
+        <q-item-label class="text-yellow-500 font-semibold">{{ title }}</q-item-label>
+        <span :class="text_grey" class="text-xs">  {{ caption }}</span>
+      
     </q-item-section>
 </q-item>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-
+import { Core } from '../store/core'
 @Component
 export default class EssentialLink extends Vue {
+      private dark:boolean = Core.DARK
     @Prop({ type: String, required: true }) readonly title!: string;
     @Prop({ type: String, default: '' }) readonly caption!: string;
     @Prop({ type: String, default: '#' }) readonly link!: string;
     @Prop({ type: String, default: '' }) readonly icon!: string;
+
+     get t() {
+        return (!this.dark) ? `text-black` : `text-white`
+    }
+    get bg() {
+        return (this.dark) ? `bg-black` : `bg-white`
+    }
+
+    get text_grey() {
+        return (this.dark) ? `text-gray-300` : `text-gray-500`
+    }
+
+     get text_orange() {
+        return (this.dark) ? `text-yellow-500` : `text-gray-500`
+    }
+
 }
 </script>

@@ -12,12 +12,12 @@
         </q-toolbar>
     </q-header> -->
 
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered content-class="bg-grey-1">
+    <q-drawer :content-class="bg" v-model="leftDrawerOpen" show-if-above bordered >
         <q-list>
-            <q-item-label header class="text-grey-8">
+            <q-item-label header :class="t" class="font-semibold">
                 Menu
             </q-item-label>
-            <EssentialLink v-for="link in essentialLinks" :key="link.title" v-bind="link" />
+            <EssentialLink :class="t" v-for="link in essentialLinks" :key="link.title" v-bind="link" />
         </q-list>
     </q-drawer>
 
@@ -141,6 +141,13 @@ export default class MainLayout extends Vue {
         if (!user.id) {
             await this.$router.replace(`/`)
         }
+    }
+
+     get t() {
+        return (!this.dark) ? `text-black` : `text-white`
+    }
+    get bg() {
+        return (this.dark) ? `bg-black` : `bg-white`
     }
 
 }

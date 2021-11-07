@@ -31,11 +31,11 @@
             </div>
         </form>
         <br> <br>
-        <div class="w-full">
+        <!-- <div class="w-full">
             <center>
                 <q-btn @click="logout()" style="width:90%;" class="m-2 " color="red" icon="login" label="Logout" />
             </center> 
-        </div>
+        </div> -->
 
     </div>
 
