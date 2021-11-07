@@ -1,10 +1,16 @@
 <template>
 <q-page class=" bg-profile pt-6">
 
-    <div class="flex flex-col pl-6  ">
-        <h1 :class="t" class="text-3xl font-bold">Profile</h1>
-        <span  :class="t">Setting My Account</span>
-    </div> 
+  
+      <div class="flex  pr-6 ">
+          <q-btn size="xl" flat color="red" icon="west"   @click="$router.go(-1)" />
+        <q-space />
+        <div class="text-right">
+            <h1 :class="t"  class="text-3xl font-bold"> Profile</h1>
+            <span :class="t"  >Setting My Account</span>
+        </div> 
+    </div>
+
     <div class="flex flex-col justify-center items-center w-full">
         <form class=" w-full p-4" @submit.prevent="editUser()">
             <q-input v-model="formUser.username" color="black" disable bg-color="white" class="m-2 mt-4" outlined type="text" label="Username" />

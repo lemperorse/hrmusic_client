@@ -1,12 +1,16 @@
 <template>
-<q-page class=" bg-goal">
-    <div class="flex flex-col pl-6  mt-6">
-        <h1 class="text-3xl font-bold">Place Zone</h1>
-        <span>Running in zone</span>
+<q-page class=" bg-goal   pt-6">
+       <div class="flex  pr-6 ">
+          <q-btn size="xl" flat color="orange" icon="west"   @click="$router.go(-1)" />
+        <q-space />
+        <div class="text-right">
+            <h1 :class="t"  class="text-3xl font-bold"> Place Zone</h1>
+            <span :class="t"  >Calculater by Heart Rate</span>
+        </div> 
     </div>
     <div class="flex flex-col justify-center items-center">
         <div class="mt-4">
-            <h2 class="text-base ml-4 font-bold">Threshold Running Pace</h2>
+            <h2 :class="t" class="text-base ml-4 font-bold">Threshold Running Pace</h2>
             <div class="flex w-full justify-center items-center">
 
                 <q-input style="width:35%;" dense type="text" color="black" bg-color="white" class="m-1 " outlined label="Min" />
@@ -60,12 +64,28 @@
 
 </script><script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+ import { Core } from "../../store/core";
 
 @Component({
     components: {}
 })
 export default class PageIndex extends Vue {
-
+get dark(){
+      return Core.DARK
+    }
+   
+     get t() {
+         return (!this.dark) ? `text-black` : `text-white`
+     }
+     get bg() {
+         return (!this.dark) ? `bg-black` : `bg-white`
+     }
+     get t_gray() {
+         return (!this.dark) ? `text-gray-600` : `text-gray-300`
+     }
+     get t_gray_xl() {
+         return (!this.dark) ? `text-black` : `text-gray-600`
+     }
 };
 </script>
 

@@ -1,14 +1,22 @@
 <template>
-<q-page class=" bg-goal">
-
-    <div class="flex flex-col justify-center items-center bg-white shadow-4xl mt-10">
+<q-page class=" pt-6  bg-goal">
+  <div class="flex  pr-6 ">
+          <q-btn size="xl" flat color="red" icon="west"   @click="$router.go(-1)" />
+        <q-space />
+        <div class="text-right">
+            <h1 :class="t"  class="text-3xl font-bold"> About</h1>
+            <span :class="t"  >Application Info data</span>
+        </div>
+    </div>
+    <div :class="bg" class="flex flex-col justify-center items-center  shadow-4xl mt-10">
         <div>
+          
             <i class="em em-gift_heart text-6xl" aria-role="presentation" aria-label="HEART WITH RIBBON"></i>
         </div>
-        <h1 class="text-3xl font-bold">Heart Exercise</h1>
-        <span>Application for exercise with music</span>
-        <span class="mt-4 font-bold">Version Alpha0.1b</span>
-         <span class="mt-4 font-bold">Copyright 2021 © Nattapon Kumyaito</span>
+        <h1 :class="t"  class="text-3xl font-bold">Heart Exercise</h1>
+        <span :class="t" >Application for exercise with music</span>
+        <span :class="t"  class="mt-4 font-bold">Version Beta 1.0</span>
+         <span :class="t"  class="mt-4 font-bold">Copyright 2021 © Nattapon Kumyaito</span>
     </div>
 
 </q-page>
@@ -18,12 +26,27 @@
 
 </script><script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-
+import { Core } from '../../store/core'
 @Component({
     components: {}
 })
 export default class PageIndex extends Vue {
-
+ get dark(){
+      return Core.DARK
+    }
+    get t(){
+        return (!this.dark)?`text-black`:`text-white`
+    }
+    get bg(){
+        return (this.dark)?`bg-black`:`bg-white`
+    }
+    get t_gray(){
+        return (!this.dark)?`text-gray-600`:`text-gray-300`
+    }
+    get t_gray_xl(){
+        return (!this.dark)?`text-black`:`text-gray-600`
+    }
+    
 };
 </script>
 

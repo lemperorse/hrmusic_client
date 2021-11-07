@@ -1,9 +1,18 @@
 <template>
-<q-page class="bg-hr">
+<q-page class="bg-hr  pt-6">
+      <div class="flex  pr-6 ">
+          <q-btn size="xl" flat color="orange" icon="west"   @click="$router.go(-1)" />
+        <q-space />
+        <div class="text-right">
+            <h1 :class="t"  class="text-3xl font-bold"> Devices</h1>
+            <span :class="t"  >Bluetooth Manager</span>
+        </div> 
+    </div>
+
     <div class="flex flex-col justify-center items-center p-4">
         <div class="
-          w-32
-          h-32
+          w-40
+          h-40
           flex flex-col
           justify-center
           items-center

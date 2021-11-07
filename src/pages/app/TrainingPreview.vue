@@ -7,10 +7,9 @@
         <div class="text-right">
             <h1 :class="t"  class="text-3xl font-bold"> Preview Calendar</h1>
             <span :class="t"  >View Training Date</span>
-        </div>
-
-      
+        </div> 
     </div>
+    
     <div class="flex flex-col justify-center items-center pt-4" v-if="response">
         <div class="mb-4 text-left w-full pl-11 bg-green-400">
             <div class="text-xl text-semibold">{{myPlan.name}}</div>
@@ -27,7 +26,7 @@
                 <q-item-section avatar>
                     <i :class="`text-${data.color}-600`" class="mdi mdi-run-fast text-xl" aria-role="presentation" aria-label="TEAR-OFF CALENDAR"></i>
                 </q-item-section>
-                <q-item-section>
+                <q-item-section @click="$router.push(`/app/program/preview/?id=${data.id}`)">
                     <!-- <q-item-label :class="`text-${data.color}-600`">{{ data.mode }} </q-item-label> -->
                     <q-item-label caption>
                         <span :class="`text-${data.color}-600`" class="text-base font-bold  ">

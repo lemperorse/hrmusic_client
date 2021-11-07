@@ -1,5 +1,5 @@
 <template>
-<div>
+<div >
     <div>
         <div class="flex w-full mt-6">
             <h2 :class="t" class=" text-xl font-semibold ">History Goals</h2>
@@ -9,7 +9,7 @@
 
         <div class="mt-4  " v-if="response">
             <div :class="(dark)?` bg-grey-10 `:` bg-or text-white`" class="rounded shadow-xl  w-full m-2 mt-4 p-2 border-l-4 border-green-600" v-for="goal,i in listGoals" :key="i" v-if="i < 3">
-                <div class="flex items-center ">
+                <div class="flex items-center "  @click="$router.push(`/app/calendar-preview?id=${goal.id}`)" >
                     <span class="em em-checkered_flag text-3xl" aria-role="presentation" aria-label="RUNNER"></span>
                     <div class="pl-3">
                         <div :class="t" class=" font-semibold   text-xl">
@@ -42,7 +42,7 @@
             </q-header>
 
             <q-page-container>
-                <q-page padding>
+                <q-page padding  :class="(dark)?` bg-grey-10 `:` bg-or text-white`">
 
                     <q-list :dark="dark" bordered v-for="goal,n in listGoals" :key="n">
                         <q-item clickable v-ripple @click="$router.push(`/app/calendar-preview?id=${goal.id}`)">

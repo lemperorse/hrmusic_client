@@ -24,6 +24,8 @@ const routes: RouteConfig[] = [
       { path: 'preview/', component: () => import('pages/app/Preview.vue') },
       { path: 'setting/', component: () => import('pages/app/Setting.vue') },
       { path: 'running/', component: () => import('pages/app/Running.vue') },
+      { path: 'program/list', component: () => import('pages/app/ProgramList.vue') },
+      { path: 'program/preview', component: () => import('pages/app/ProgramPreview.vue') },
     ]
   },
 

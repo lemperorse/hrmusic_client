@@ -1,9 +1,15 @@
 <template>
 <q-page class=" bg-profile pt-6">
-    <div class="flex flex-col pl-6  ">
-        <h1 :class="t" class="text-3xl font-bold">Setting</h1>
-        <span :class="t">Config Application</span>
+ 
+      <div class="flex  pr-6 ">
+          <q-btn size="xl" flat color="red" icon="west"   @click="$router.go(-1)" />
+        <q-space />
+        <div class="text-right">
+            <h1 :class="t"  class="text-3xl font-bold">Setting</h1>
+            <span :class="t"  >Config Application</span>
+        </div> 
     </div>
+
     <div class="q-pa-md rounded">
         <q-list :dark="dark" bordered>
             <q-item clickable v-ripple @click="switchDark">

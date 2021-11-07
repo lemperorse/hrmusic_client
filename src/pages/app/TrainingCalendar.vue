@@ -1,11 +1,17 @@
 <template>
 <q-page class="bg-calendar pt-6">
 
-    <div class="flex flex-col pl-6 ">
-        <h1 :class="t" class="text-3xl font-bold">Calendar</h1>
-        <span :class="t">View Training Date</span>
-        
+    
+      <div class="flex  pr-6 ">
+          <q-btn size="xl" flat color="red" icon="west"   @click="$router.go(-1)" />
+        <q-space />
+        <div class="text-right">
+            <h1 :class="t"  class="text-3xl font-bold"> Calendar</h1>
+            <span :class="t"  >View Training Date</span>
+        </div> 
     </div>
+
+ 
     <div class="flex flex-col justify-center items-center pt-4" v-if="response">
        <div class="mb-4 text-left w-full pl-11 bg-green-400"> 
            <div class="text-xl text-semibold">{{myPlan.name}}</div>
@@ -16,11 +22,11 @@
        </div>
         <q-date :dark="dark"  v-model="date" :options="options"   :events="map(events,'date')" :event-color="(date) => findColor(date)" /> 
              <div v-for="(data, i) in events" :key="i" class="w-10/12 pl-6">
-            <q-item  :class="bg"  class="rounded-xl border-1  shadow-xl mt-2">
+            <q-item  :class="bg"  class="rounded-xl border-1  shadow-xl mt-2"  >
                 <q-item-section avatar>
                     <i :class="`text-${data.color}-600`" class="mdi mdi-run-fast text-xl" aria-role="presentation" aria-label="TEAR-OFF CALENDAR"></i>
                 </q-item-section>
-                <q-item-section>
+                <q-item-section  @click="$router.push(`/app/program/preview/?id=${data.id}`)" >
                     <!-- <q-item-label :class="`text-${data.color}-600`">{{ data.mode }} </q-item-label> -->
                     <q-item-label caption>
                         <span  :class="`text-${data.color}-600`" class="text-base font-bold  ">
