@@ -83,6 +83,9 @@ import History from '../../components/Home/History.vue'
 export default class PageIndex extends Vue {
     private dark: boolean = Core.DARK
     private user: any = Auth.user
+   
+
+
     get t() {
         return (!this.dark) ? `text-black` : `text-white`
     }

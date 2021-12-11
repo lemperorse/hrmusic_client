@@ -21,10 +21,24 @@
     </gmap-map>
 
     <div class="p-4">
-        <h2 :class="t" class="text-sm">{{myGoal.race_date}}</h2>
-        <h2  :class="t"  class="font-bold text-xl">{{myPlan.name}} </h2>
+        <div class="flex w-full">
+            <div>
+                <h2 :class="t" class="text-sm">{{myGoal.race_date}}</h2>
+                <h2  :class="t"  class="font-bold text-xl">{{myPlan.name}} </h2>
+            </div>
+            <q-space />
+             <q-btn v-if="!detecting" @click="startDetect()" color="primary" icon="check" label="Start" />
+             <q-btn v-else @click="stopDectect()" color="red" icon="check" label="Stop" />
+        </div>
+      
     </div>
-    <div class="flex flex-col justify-center items-center  ">
+
+    <div class="flex flex-col justify-center items-center " v-if="!detecting">
+           
+    </div>
+
+
+    <div class="flex flex-col justify-center items-center  " v-else>
 
         <div class="w-32 h-32 flex flex-col justify-center items-center rounded-full border border-red-500">
             <i class="em em-heart text-4xl" aria-role="presentation" aria-label="HEAVY BLACK HEART"></i>
@@ -76,6 +90,8 @@
         <br><br>
     </div>
 
+
+
 </q-page>
 </template>
 
@@ -92,6 +108,19 @@ import moment from 'moment'
     components: {}
 })
 export default class PageIndex extends Vue {
+
+    private detecting:boolean = false
+
+    
+    async startDetect(){
+        this.detecting = true
+    }
+
+    async stopDectect(){
+        this.detecting = false
+    }
+
+
     get bleData() {
         return Blex.DATA
     }
