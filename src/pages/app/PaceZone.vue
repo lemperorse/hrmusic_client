@@ -1,17 +1,102 @@
 <template>
 <q-page class=" bg-goal   pt-6">
-       <div class="flex  pr-6 ">
-          <q-btn size="xl" flat color="orange" icon="west"   @click="$router.go(-1)" />
+    <div class="flex  pr-6 ">
+        <q-btn size="xl" flat color="orange" icon="west" @click="$router.go(-1)" />
         <q-space />
         <div class="text-right">
-            <h1 :class="t"  class="text-3xl font-bold"> Place Zone</h1>
-            <span :class="t"  >Calculater by Heart Rate</span>
-        </div> 
+            <h1 :class="t" class="text-3xl font-bold"> Place Zone</h1>
+            <span :class="t">Calculater by Heart Rate</span>
+        </div>
     </div>
     <div class="flex flex-col justify-center items-center">
         <div class="mt-4">
+
             <h2 :class="t" class="text-base ml-4 font-bold">Threshold Running Pace</h2>
-            <div class="flex w-full justify-center items-center">
+            <q-card class="my-card">
+                <form name="input1">
+
+                    <div></div>
+
+                    <table cellpadding="4" cellspacing="0">
+                        <tbody>
+                            <tr bgcolor="#cccccc">
+                                <td  >Recent race length (you can use a decimal point, eg. 26.2):</td>
+                                <td>
+                                    <div class="flex flex-row">
+                                        <input :class="input" name="length" size="6" type="text" />
+                                        <select :class="input" name="units">
+                                            <option value="km">kilometres</option>
+                                            <option value="miles">miles</option>
+                                        </select>
+                                    </div> 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td >My time (hours:minutes:seconds):</td>
+                                <td>
+                                    <input class="" name="hours" size="2" type="text" value="00" /> :
+                                    <input name="minutes" size="2" type="text" value="00" /> :
+                                    <input name="seconds" size="2" type="text" value="00" />
+                                </td>
+                            </tr>
+                            <tr bgcolor="#cccccc">
+                                <td align="right">Display my training paces in:</td>
+                                <td>
+                                    <select :class="input" name="paceType" onchange="toggleMetric()">
+                                     
+                                        <option selected="selected" value="km">min/km</option>
+                                           <option value="Miles">min/mile</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <input class="p-6 rounded bg-green-600 text-white" onclick="runConversion()" type="button" value="Calculate" />
+                                </td>
+                            </tr>
+                            <tr bgcolor="#cccccc">
+                                <td align="right">Your <a href="#easy">Zone 1</a> training pace is:</td>
+                                <td>
+                                    <input name="easy" size="17" type="text" value="" />
+                                </td>
+                            </tr>
+                            <tr bgcolor="#ffffff">
+                                <td align="right">Your <a href="#tempo">Zone 2</a> training pace is:</td>
+                                <td>
+                                    <input name="tempo" size="17" type="text" value="" />
+                                </td>
+                            </tr>
+                            <tr bgcolor="#cccccc">
+                                <td align="right">Your <a href="#maxox">Zone 3</a> training pace is:</td>
+                                <td>
+                                    <input name="maximum" size="17" type="text" value="" />
+                                </td>
+                            </tr>
+                            <tr bgcolor="#ffffff">
+                                <td align="right">Your <a href="#speedform">Zone 4</a> training pace is:</td>
+                                <td>
+                                    <input name="speed" size="17" type="text" value="" />
+                                </td>
+                            </tr>
+                            <tr bgcolor="#cccccc">
+                                <td align="right">Your <a href="#longruns">Zone 5</a> training pace is:</td>
+                                <td>
+                                    <input name="xlong" size="17" type="text" value="" />
+                                </td>
+                            </tr>
+                            <!-- <tr bgcolor="#ffffff">
+                                <td align="right">Your <a href="#yasso">Yasso 800s</a> training pace is:</td>
+                                <td>
+                                    <input name="yasso" size="17" type="text" value="" />
+                                </td>
+                            </tr> -->
+                        </tbody>
+                    </table>
+                </form>
+            </q-card>
+
+            <!-- <div class="flex w-full justify-center items-center">
 
                 <q-input style="width:35%;" dense type="text" color="black" bg-color="white" class="m-1 " outlined label="Min" />
                 <q-input style="width:35%;" dense type="text" color="black" bg-color="white" class="m-1   " outlined label="Second" />
@@ -26,7 +111,7 @@
                     <q-toolbar-title>
                         Personal Pace Zone
                     </q-toolbar-title>
-                    <!-- <q-btn dense flat round color="white" icon="mdi-plus-circle" /> -->
+
                 </q-toolbar>
                 <div class=" w-full p-4  ">
                     <div class="flex border-b-1 border-gray-400" v-for="x in 5">
@@ -34,25 +119,25 @@
                         <q-input dense type="text" color="black" bg-color="white" class="  w-1/4" outlined label="Min" />
                         <q-input dense type="text" color="black" bg-color="white" class="ml-2 w-1/4" outlined label="Max" />
                         <h2 class="text-base">min/km</h2>
-                    </div> 
-                </div> 
+                    </div>
+                </div>
             </div>
 
-             <div class="m-4 shadow-xl bg-white">
+            <div class="m-4 shadow-xl bg-white">
                 <q-toolbar class="bg-orange text-white">
                     <q-toolbar-title>
                         Personal Pace Music
-                    </q-toolbar-title> 
+                    </q-toolbar-title>
                 </q-toolbar>
                 <div class=" w-full p-4  ">
-                    <div class="flex border-b-1 border-gray-400" v-for="x in 5" >
+                    <div class="flex border-b-1 border-gray-400" v-for="x in 5">
                         <h2 class="text-base w-1/4">Z1 Easy</h2>
                         <q-input dense type="text" color="black" bg-color="white" class="  w-1/4" outlined label="Min" />
                         <q-input dense type="text" color="black" bg-color="white" class="ml-2 w-1/4" outlined label="Max" />
                         <h2 class="text-base">bpm</h2>
-                    </div> 
-                </div> 
-            </div>
+                    </div>
+                </div>
+            </div> -->
 
         </div>
     </div>
@@ -64,28 +149,29 @@
 
 </script><script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
- import { Core } from "../../store/core";
+import { Core } from "../../store/core";
 
 @Component({
     components: {}
 })
 export default class PageIndex extends Vue {
-get dark(){
-      return Core.DARK
+    input: string = "shadow appearance-none border rounded  p-2  text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    get dark() {
+        return Core.DARK
     }
-   
-     get t() {
-         return (!this.dark) ? `text-black` : `text-white`
-     }
-     get bg() {
-         return (!this.dark) ? `bg-black` : `bg-white`
-     }
-     get t_gray() {
-         return (!this.dark) ? `text-gray-600` : `text-gray-300`
-     }
-     get t_gray_xl() {
-         return (!this.dark) ? `text-black` : `text-gray-600`
-     }
+
+    get t() {
+        return (!this.dark) ? `text-black` : `text-white`
+    }
+    get bg() {
+        return (!this.dark) ? `bg-black` : `bg-white`
+    }
+    get t_gray() {
+        return (!this.dark) ? `text-gray-600` : `text-gray-300`
+    }
+    get t_gray_xl() {
+        return (!this.dark) ? `text-black` : `text-gray-600`
+    }
 };
 </script>
 

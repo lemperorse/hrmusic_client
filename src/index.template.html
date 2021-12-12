@@ -31,6 +31,124 @@
 <body>
     <!-- DO NOT touch the following DIV -->
     <div id="q-app"></div>
+
+    <script language="JavaScript">
+      
+
+        var metric;
+        var VO2max;
+
+        function initGlobals() {
+            metric = false;
+            VO2Max = -1;
+        }
+
+        function runConversion() {
+            var frm = document.forms.input1;
+            // race time in min, length in m and speed in m/min.
+            var time = document.forms.input1.hours.value * 60 + document.forms.input1.minutes.value * 1 + document.forms.input1.seconds.value / 60;
+            var rlength = document.forms.input1.length.value;
+            var speed;
+
+            if (time <= 0 || isNaN(time)) {
+                alert('Please input a valid time');
+                return;
+            }
+
+            if (rlength <= 0 || isNaN(rlength)) {
+                alert('Please input a valid race length.');
+                return;
+            }
+
+            if (frm.units.options[0].selected) {
+                rlength *= 1000;
+            } else {
+                rlength *= 1609;
+            }
+
+            speed = rlength / time;
+
+            VO2Max = velToVO2(speed) / timeToPercentVO2Max(time);
+            makeCalculations();
+        }
+
+        function makeCalculations() {
+
+            if (VO2Max <= 0) {
+                return;
+            }
+
+            var velEasy = VO2ToVel(VO2Max * .7);
+            var velTempo = VO2ToVel(VO2Max * .88);
+            var velMaximum = VO2ToVel(VO2Max);
+            var velSpeed = VO2ToVel(VO2Max * 1.1);
+            var velxlong = VO2ToVel(VO2Max * .6);
+            var velYasso = velMaximum * 1.95;
+
+            var toAppend;
+            if (metric) {
+                toAppend = ' min/km';
+            } else {
+                toAppend = ' min/mile';
+            }
+
+            var frm = document.forms.input1;
+
+            frm.easy.value = '' + timeConvert(velEasy) + toAppend;
+            frm.tempo.value = '' + timeConvert(velTempo) + toAppend;
+            frm.maximum.value = '' + timeConvert(velMaximum) + toAppend;
+            frm.speed.value = '' + timeConvert(velSpeed) + toAppend;
+            frm.xlong.value = '' + timeConvert(velEasy) + ' - ' + timeConvert(velxlong) + toAppend;
+            var oldMetric = metric;
+            metric = false;
+            frm.yasso.value = '' + timeConvert(velYasso) + ' min/800';
+            metric = oldMetric;
+        }
+
+        // Toggle output type of paces.
+        function toggleMetric() {
+            if (document.forms.input1.paceType.options[0].selected) {
+                metric = false;
+            } else {
+                metric = true;
+            }
+            makeCalculations();
+        }
+
+        // Takes a velocity and converts it to a VO2 level.   
+        function velToVO2(vel) {
+            return (-4.60 + 0.182258 * vel + 0.000104 * vel * vel);
+        }
+
+        // Takes a VO2 measurement and converts it to a velocity.
+        function VO2ToVel(VO2) {
+            return (29.54 + 5.000663 * VO2 - 0.007546 * VO2 * VO2);
+        }
+
+        // Takes a time in minutes and uses EQ 2 to convert it to a percent of VO2 maximum.   
+        function timeToPercentVO2Max(minutes) {
+            return (.8 + 0.1894393 * Math.exp(-.012778 * minutes) + 0.2989558 * Math.exp(-.1932695 * minutes));
+        }
+
+        // Takes a speed in metres / minute a converts it to a string representing a pace in
+        // minutes per mile or km.   
+        function timeConvert(speed) {
+            var ans;
+            if (!metric) {
+                ans = (1 / speed) * 1609;
+            } else {
+                ans = (1 / speed) * 1000;
+            }
+            minutes = Math.floor(ans);
+            seconds = Math.floor((ans - minutes) * 60);
+            if (seconds > 9) {
+                return '' + minutes + ':' + seconds;
+            } else {
+                return '' + minutes + ':0' + seconds;
+            }
+        }
+        // -->
+    </script>
 </body>
 
 </html>

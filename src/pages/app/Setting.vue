@@ -13,7 +13,10 @@
     <div class="q-pa-md rounded">
         <q-list :dark="dark" bordered>
             <q-item clickable v-ripple @click="switchDark">
-                <q-item-section>Dark Mode</q-item-section>
+                <q-item-section>
+                    <span v-if="!dark">Dark Mode</span>
+                    <span v-else>Light Mode</span>
+                </q-item-section>
                 <q-item-section avatar>
                     <q-icon color="primary" name="brightness_medium" />
                 </q-item-section>
