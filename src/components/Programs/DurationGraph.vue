@@ -1,6 +1,6 @@
 <template>
-<q-card  class="m-2 p-2">
-    <div v-if="response">
+<q-card  class="m-2 p-2 w-full"  style="overflow-x: scroll"> 
+    <div v-if="response" style="width:1080px">
 
         <VueApexCharts  v-if="response" type="line" height="350" :options="chartOptions" :series="series"></VueApexCharts>
 

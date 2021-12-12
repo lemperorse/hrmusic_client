@@ -45,8 +45,9 @@
                     <q-date :dark="dark" minimal  v-model="date" :options="options" :events="map(events,'date')" :event-color="(date) => findColor(date)" />
                     <br> <br>  
                     <span :class="t" class="text-xl font-semibold mt-4 ml-2 mb-2">Choose program to run</span>
+                     
                     <q-list class="m-2" :dark="dark" bordered v-for="(program,index) in events" :key="index" 
-                        @click="$router.push(`/app/running/?id=${program.id}`)"  >
+                        @click="goPage(checkRun(program.id,program.no),program.id,program.no)"  >
                         <q-item>
                             <q-item-section>
                                 <span :class="t" class="font-semibold text-xl"> {{program.name}}</span>
@@ -58,7 +59,10 @@
                             </q-item-section>
                             <q-item-section avatar> 
                                 <span :class="t" class="font-semibold" style="color: #ff8000!important;"> {{program.date}}</span>
-                                <span :class="t">Not Running</span>
+                                
+                                <span v-if="checkRun(program.id,program.no)" :class="t">Runned</span>
+                                <span v-else :class="t">Not Running</span>
+                                
                             </q-item-section>
                         </q-item>
 
@@ -95,13 +99,31 @@ export default class Goal extends Vue {
     myGoal: any = {}
     dialog: boolean = false;
     date: any = moment().format('YYYY/MM/DD')
+    listMain:any =- []
     async created() {
         this.listGoals = await Core.getHttp(`/api/exercise/goalall/?user=${this.user.id}`)
+       
         if (this.listGoals.length >= 1) {
             await this.getMyGoal()
             await this.generateData();
+             this.listMain = await Core.getHttp(`/api/exercise/run/main/?user=${this.user.id}&goal=${this.myGoal.id}&plan=${this.myPlan.id}`)
             this.response = true
         }
+    }
+
+    async goPage(runned:boolean,program:any,no:any){
+        if(runned){
+            let runned = _.find(this.listMain,{"program":program,"no":no})
+            await this.$router.push(`/app/runned/preview?id=${program}&main=${runned.id}`)
+        }else{
+           await this.$router.push(`/app/running/?id=${program}`)
+        }
+    }
+
+    checkRun(program:any,no:any){
+        let runned = _.some(this.listMain,{"program":program,"no":no})
+        //console.log(runned,no,program)
+        return runned
     }
 
     async getMyGoal() {
@@ -127,7 +149,8 @@ export default class Goal extends Vue {
                 date: outDate.format('YYYY/MM/DD'),
                 name: this.listProgram[i].name,
                 color: this.getColor(this.listProgram[i].difficulty),
-                difficulty: this.listProgram[i].difficulty
+                difficulty: this.listProgram[i].difficulty,
+                no:this.listProgram[i].no,
             })
         }
         this.events = eventDate
