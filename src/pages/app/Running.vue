@@ -3,7 +3,7 @@
 
     <div class="flex flex-col   p-4  ">
         <div class="flex w-full">
-              <q-btn  flat color="primary" icon="west" label="Back to Dashboard"  @click="$router.go(-1)" />
+              <q-btn  flat color="primary" icon="west" label="Back "  @click="$router.go(-1)" />
             <q-space />
             <q-btn flat class="flex  " :class="t">
                 <i class="em em-hearts" aria-role="presentation" aria-label="BLACK HEART SUIT"></i>
@@ -22,7 +22,7 @@
 
     <div class="p-4">
         <div class="flex w-full">
-            <div>
+            <div> 
                 <h2 :class="t" class="text-sm">{{myGoal.race_date}}</h2>
                 <h2  :class="t"  class="font-bold text-xl">{{myPlan.name}} </h2>
             </div>
@@ -67,7 +67,7 @@
                     <q-item-section>
                         <q-item-label :class="t">Zone</q-item-label>
                         <q-item-label caption>
-                            <span :class="t" class="text-xl font-bold  "> 2</span>
+                            <span :class="t" class="text-xl font-bold  "> {{zone}}</span>
                         </q-item-label>
                     </q-item-section>
                 </q-item>
@@ -89,7 +89,7 @@
         </div>
         <br><br>
     </div>
-
+ 
 
 
 </q-page>
@@ -102,22 +102,103 @@ import { Vue, Component } from 'vue-property-decorator';
 import { Blex } from '../../store/bluetooth'
 import { Core } from '../../store/core'
 import { Auth } from '../../store/auth'
+import { Exercise } from '../../store/exercise'
+
 import moment from 'moment' 
+import countdown from 'countdown'
+import {
+  Loading,
+  QSpinnerGears
+} from 'quasar'
 
 @Component({
     components: {}
 })
 export default class PageIndex extends Vue {
 
-    private detecting:boolean = false
-
+    private detecting:boolean = false 
+    private detect:any = {}
+    private runMainForm:any = {}
+    private runMain:any = {}
+    private zone:Number = 0
     
+    
+    async createdRunMain(){ await Loading.hide()
+
+        let main = await Core.getHttp(`/api/exercise/run/main/?user=${Auth.user.id}&goal=${this.myGoal.id}&plan=${this.myGoal.plan.id}&program=${this.$route.query.id}`)
+        if(main.length == 0){
+            this.runMainForm = {
+            "discription": "",
+            "passing": true,
+            "user": Auth.user.id,
+            "goal": this.myGoal.id,
+            "plan": this.myGoal.plan.id,
+            "program": Number(this.$route.query.id)
+        }
+        let runMain = await Core.postHttp(`/api/exercise/run/main/`,this.runMainForm)
+        this.runMain = runMain 
+        }else{
+            this.runMain = main[0]
+        } 
+         await this.startProgram();
+    }
+
+    async startProgram(){
+       this.durations.forEach((duartion:any) => {
+           var now = moment(); // new Date().getTime();
+            var then = moment().add(60, 'seconds'); // new Date(now + 60 * 1000);
+
+            console.log(moment(now).format('h:mm:ss a'));
+            console.log(moment(then).format('h:mm:ss a'));
+            console.log(moment(now).to(then));
+            let data = countdown( new Date(2021, 0, 1,2021, 0, 1,countdown.SECONDS) ).toString();
+            console.log('[]ss',data)
+        });  
+    }
+
     async startDetect(){
-        this.detecting = true
+        clearInterval(this.detect)
+        await Loading.show({message:'Starting Decection'}) 
+        await Blex.startNotify()
+        setTimeout(async ()=> { 
+                console.log('[stop]');
+                await Loading.hide()
+                this.detecting = true
+        }, 2000);
+        this.detect = setInterval(async()=>{
+            let zone = await Exercise.getZone(this.bleData)
+            this.zone = (zone)?zone:0
+            if(zone){
+                await this.storeResult(this.bleData,zone)
+            }
+            console.log('[DDATA]',this.bleData,zone)
+        }, 2000);
     }
 
     async stopDectect(){
+        await Loading.show({message:'Stopping Decection'})
         this.detecting = false
+        await Blex.stopNotify()
+        clearInterval(this.detect)
+        setTimeout(async ()=> { 
+            console.log('[stop]');
+            await Loading.hide()
+        }, 2000);
+       // await Loading.hide()
+    }
+
+    async storeResult(bpm:any,zone:any){
+        let data = {
+            "hr_bpm": bpm,
+            "hr_zone": zone,
+            "music_bpm": bpm,
+            "music_zone": zone,
+            "music": "Test Music",
+            "user": Auth.user.id,
+            "run_main": this.runMain.id
+        }
+        await Core.postHttp(`/api/exercise/run/result/`,data) 
+        console.log('[result]',data)
     }
 
 
@@ -161,16 +242,27 @@ export default class PageIndex extends Vue {
     response:boolean = false
     myPlan:any = {}
     myGoal:any = {}
+    program:any = {}
+    durations:any = []
        async created() {
         this.listGoals = await Core.getHttp(`/api/exercise/goalall/?user=${this.user.id}`) 
         if (this.listGoals.length >= 1) {
             await this.getMyGoal() 
+            await this.getProgram()
+            await this.createdRunMain()
             this.response = true
         }
     }
 
+    async getProgram(){
+        this.program = await Core.getHttp(`/api/exercise/program/${this.$route.query.id}/`)
+        this.durations = this.program.durations
+        console.log(this.durations)
+    }
+
 
       async getMyGoal() {
+          
         this.myGoal = this.listGoals[this.listGoals.length - 1]
         this.myPlan = this.myGoal.plan
         this.listProgram = this.myPlan.program

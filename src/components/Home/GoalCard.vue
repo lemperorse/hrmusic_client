@@ -46,7 +46,7 @@
                     <br> <br>  
                     <span :class="t" class="text-xl font-semibold mt-4 ml-2 mb-2">Choose program to run</span>
                     <q-list class="m-2" :dark="dark" bordered v-for="(program,index) in events" :key="index" 
-                        @click="$router.push('/app/running/?id=${program.id}')"  >
+                        @click="$router.push(`/app/running/?id=${program.id}`)"  >
                         <q-item>
                             <q-item-section>
                                 <span :class="t" class="font-semibold text-xl"> {{program.name}}</span>

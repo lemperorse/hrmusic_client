@@ -49,7 +49,7 @@ class BlexModule extends VuexModule {
             BLE.startNotification(this.DEVICE.id, serviceUUID, characteristicUUID,
                 (result: any) => {
 
-                    console.dir(result)
+                   console.log('[HR]',result)
                     var data = new Uint8Array(result)
                     this.DATA = data[1]
                 }, () => {
