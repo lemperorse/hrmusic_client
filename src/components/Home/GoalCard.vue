@@ -20,10 +20,10 @@
             </div>
             <div class="w-full mt-2 flex">
                 <span :class="(dark)?`text-blue-500`:`text-white`" class="  text-xs font-medium  ">
-                    <span class="font-semibold pr-2">Start</span>: {{myGoal.race_date_out}}
+                    <span class="font-semibold pr-2">{{$l('เริ่ม','Start')}}</span>: {{myGoal.race_date_out}}
                 </span>
                 <q-space />
-                <span :class="(dark)?`text-yellow-600`:`text-white`" class=" text-xs font-medium  ">{{listProgram.length}} Programs</span>
+                <span :class="(dark)?`text-yellow-600`:`text-white`" class=" text-xs font-medium  ">{{listProgram.length}} {{$l('โปรแกรม','Programs')}}</span>
 
             </div>
 
@@ -42,9 +42,9 @@
 
             <q-page-container>
                 <q-page padding :class="(dark)?` bg-grey-10 `:` `"> 
-                    <q-date :dark="dark" minimal  v-model="date" :options="options" :events="map(events,'date')" :event-color="(date) => findColor(date)" />
+                    <q-date  :dark="dark" minimal  v-model="date" :options="options" :events="map(events,'date')" :event-color="(date) => findColor(date)" />
                     <br> <br>  
-                    <span :class="t" class="text-xl font-semibold mt-4 ml-2 mb-2">Choose program to run</span>
+                    <span :class="t" class="text-xl font-semibold mt-4 ml-2 mb-2">{{$l('เลือกโปรแกรมที่จะวิ่ง','Choose program to run')}}</span>
                      
                     <q-list class="m-2" :dark="dark" bordered v-for="(program,index) in events" :key="index" 
                         @click="goPage(checkRun(program.id,program.no),program.id,program.no)"  >
@@ -60,8 +60,8 @@
                             <q-item-section avatar> 
                                 <span :class="t" class="font-semibold" style="color: #ff8000!important;"> {{program.date}}</span>
                                 
-                                <span v-if="checkRun(program.id,program.no)" :class="t">Runned</span>
-                                <span v-else :class="t">Not Running</span>
+                                <span v-if="checkRun(program.id,program.no)" :class="t">{{$l('วิ่งแล้ว','Runned')}}</span>
+                                <span v-else :class="t">{{$l('ไม่ได้วิ่ง','Not Running')}}</span>
                                 
                             </q-item-section>
                         </q-item>
@@ -91,7 +91,10 @@ import * as _ from 'lodash'
 export default class Goal extends Vue {
     private dark: boolean = Core.DARK
     private user: any = Auth.user
-
+     $l(th:any,en:any){
+        let lang = localStorage.getItem('lang')
+        return (lang == 'th')?th:en
+    }
     listGoals: any = []
     listProgram: any = []
     response: boolean = false

@@ -3,7 +3,7 @@
 
     <div class="flex flex-col   p-4  ">
         <div class="flex w-full">
-              <q-btn  flat color="primary" icon="west" label="Back "  @click="$router.go(-1)" />
+            <q-btn flat color="primary" icon="west" label="Back " @click="$router.go(-1)" />
             <q-space />
             <q-btn flat class="flex  " :class="t">
                 <i class="em em-hearts" aria-role="presentation" aria-label="BLACK HEART SUIT"></i>
@@ -22,29 +22,83 @@
 
     <div class="p-4">
         <div class="flex w-full">
-            <div> 
+            <div>
                 <h2 :class="t" class="text-sm">{{myGoal.race_date}}</h2>
-                <h2  :class="t"  class="font-bold text-xl">{{myPlan.name}} </h2>
+                <h2 :class="t" class="font-bold text-xl">{{myPlan.name}} </h2>
             </div>
             <q-space />
-             <q-btn v-if="!detecting" @click="startDetect()" color="primary" icon="check" label="Start" />
-             <q-btn v-else @click="stopDectect()" color="red" icon="check" label="Stop" />
+            <q-btn v-if="!detecting" @click="startDetect()" color="primary" icon="check" label="Start" />
+            <q-btn v-else @click="stopDectect()" color="red" icon="check" label="Stop" />
         </div>
-      
+
+        <div class="w-full p-2 ">
+            <q-item :class="bg" class="rounded-xl border-1 bg-gray-200 shadow-xl">
+                <q-item-section avatar>
+                    <i class="em em-timer_clock text-4xl" aria-role="presentation" aria-label=""></i>
+                </q-item-section>
+                <q-item-section>
+                    <q-item-label caption>
+                        <h3 class="text-sm font-semibold">Total Time : {{time}}</h3>
+                        <h3 class="text-sm font-semibold">Round Time : {{inTime}} (Zone {{currentZone}})</h3>
+                    </q-item-label>
+                </q-item-section>
+            </q-item>
+        </div>
+
     </div>
 
     <div class="flex flex-col justify-center items-center " v-if="!detecting">
-           
+
     </div>
 
-
     <div class="flex flex-col justify-center items-center  " v-else>
-
-        <div class="w-32 h-32 flex flex-col justify-center items-center rounded-full border border-red-500">
+        <div class="w-32 h-32 flex flex-col justify-center items-center rounded-full border border-red-500 mt-4">
             <i class="em em-heart text-4xl" aria-role="presentation" aria-label="HEAVY BLACK HEART"></i>
             <h2 :class="t" class="text-xl">{{bleData}} bpm</h2>
         </div>
+        <div class="p-2 flex w-full justify-center items-center mt-4">
+            <div class="w-6/12 p-2 ">
+                <q-item :class="bg " class="rounded-xl border-1 bg-gray-200 ">
+                    <q-item-section avatar>
+                        <i class="em em-round_pushpin  text-4x" aria-role="presentation" aria-label="ROUND PUSHPIN"></i>
 
+                    </q-item-section>
+                    <q-item-section>
+                        <q-item-label :class="t">Round</q-item-label>
+                        <q-item-label caption>
+                            <span :class="t" class="text-xl font-bold  "> {{round}} / {{durations.length}}</span>
+                        </q-item-label>
+                    </q-item-section>
+                </q-item>
+            </div>
+            <div class="w-6/12 p-2 ">
+                <q-item :class="bg " class="rounded-xl border-1 bg-gray-200">
+                    <q-item-section avatar>
+                        <i class="em em-repeat text-4xl" aria-role="presentation" aria-label="CLOCKWISE RIGHTWARDS AND LEFTWARDS OPEN CIRCLE ARROWS"></i>
+                    </q-item-section>
+                    <q-item-section>
+                        <q-item-label :class="t">Replete</q-item-label>
+                        <q-item-label caption>
+                            <span :class="t" class="text-xl font-bold  "> {{currentReps}} /{{reps}} </span>
+                        </q-item-label>
+                    </q-item-section>
+                </q-item>
+            </div>
+            <!-- <div class="w-12/12 p-2 ">
+                <q-item :class="bg " class="rounded-xl border-1 bg-gray-200">
+                    <q-item-section avatar>
+                        <i class="em em-man-running  text-4xl" aria-role="presentation" aria-label=""></i>
+                    </q-item-section>
+                    <q-item-section>
+                        <q-item-label :class="t">Zone</q-item-label>
+                        <q-item-label caption>
+                            <span :class="t" class="text-xl font-bold  "> {{zone}}</span>
+                        </q-item-label>
+                    </q-item-section>
+                </q-item>
+            </div> -->
+
+        </div>
         <div class="p-2 flex w-full justify-center items-center ">
             <div class="w-7/12  p-2">
                 <q-item :class="bg " class="rounded-xl border-1 bg-gray-200">
@@ -89,8 +143,6 @@
         </div>
         <br><br>
     </div>
- 
-
 
 </q-page>
 </template>
@@ -98,17 +150,30 @@
 <script>
 
 </script><script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import { Blex } from '../../store/bluetooth'
-import { Core } from '../../store/core'
-import { Auth } from '../../store/auth'
-import { Exercise } from '../../store/exercise'
-
-import moment from 'moment' 
-import countdown from 'countdown'
 import {
-  Loading,
-  QSpinnerGears
+    Vue,
+    Component
+} from 'vue-property-decorator';
+import {
+    Blex
+} from '../../store/bluetooth'
+import {
+    Core
+} from '../../store/core'
+import {
+    Auth
+} from '../../store/auth'
+import {
+    Exercise
+} from '../../store/exercise'
+
+import moment from 'moment'
+import countdown from 'countdown'
+import Swal from 'sweetalert2'
+
+import {
+    Loading,
+    QSpinnerGears
 } from 'quasar'
 
 @Component({
@@ -116,78 +181,147 @@ import {
 })
 export default class PageIndex extends Vue {
 
-    private detecting:boolean = false 
-    private detect:any = {}
-    private runMainForm:any = {}
-    private runMain:any = {}
-    private zone:Number = 0
-    
-    
-    async createdRunMain(){ await Loading.hide()
+    private detecting: boolean = false
+    private detect: any = {}
+    private runMainForm: any = {}
+    private runMain: any = {}
+    private zone: Number = 0
+    private time: any = '00:00:00'
+    private inTime: any = '00:00:00'
+    private round: any = 0
+    private currentZone: any = 0
+    private reps: number = 0
+    private currentReps: number = 0
+
+    async createdRunMain() {
+        await Loading.hide()
 
         let main = await Core.getHttp(`/api/exercise/run/main/?user=${Auth.user.id}&goal=${this.myGoal.id}&plan=${this.myGoal.plan.id}&program=${this.$route.query.id}`)
-        if(main.length == 0){
+        if (main.length == 0) {
             this.runMainForm = {
-            "discription": "",
-            "passing": true,
-            "user": Auth.user.id,
-            "goal": this.myGoal.id,
-            "plan": this.myGoal.plan.id,
-            "program": Number(this.$route.query.id)
-        }
-        let runMain = await Core.postHttp(`/api/exercise/run/main/`,this.runMainForm)
-        this.runMain = runMain 
-        }else{
+                "discription": "",
+                "passing": true,
+                "user": Auth.user.id,
+                "goal": this.myGoal.id,
+                "plan": this.myGoal.plan.id,
+                "program": Number(this.$route.query.id)
+            }
+            let runMain = await Core.postHttp(`/api/exercise/run/main/`, this.runMainForm)
+            this.runMain = runMain
+        } else {
             this.runMain = main[0]
-        } 
-         await this.startProgram();
+        }
+        await this.startProgram();
     }
 
-    async startProgram(){
-       this.durations.forEach((duartion:any) => {
-           var now = moment(); // new Date().getTime();
+    async startProgram() {
+        this.durations.forEach((duartion: any) => {
+            var now = moment(); // new Date().getTime();
             var then = moment().add(60, 'seconds'); // new Date(now + 60 * 1000);
 
             console.log(moment(now).format('h:mm:ss a'));
             console.log(moment(then).format('h:mm:ss a'));
             console.log(moment(now).to(then));
-            let data = countdown( new Date(2021, 0, 1,2021, 0, 1,countdown.SECONDS) ).toString();
-            console.log('[]ss',data)
-        });  
+            let data = countdown(new Date(2021, 0, 1, 2021, 0, 1, countdown.SECONDS)).toString();
+            console.log('[]ss', data)
+
+        });
     }
 
-    async startDetect(){
+    timmer: number = 0
+    async startDetect() {
+
         clearInterval(this.detect)
-        await Loading.show({message:'Starting Decection'}) 
+        await Loading.show({
+            message: 'Starting Decection'
+        })
         await Blex.startNotify()
-        setTimeout(async ()=> { 
-                console.log('[stop]');
-                await Loading.hide()
-                this.detecting = true
-        }, 2000);
-        this.detect = setInterval(async()=>{
-            let zone = await Exercise.getZone(this.bleData)
-            this.zone = (zone)?zone:0
-            if(zone){
-                await this.storeResult(this.bleData,zone)
+        await this.sleep(2000);
+        await Loading.hide()
+
+        this.detecting = true
+
+        for (let j = 0; j < this.durations.length; j++) {
+            let setA = (this.hmsToSecondsOnly(this.durations[j].duration))
+            let setB = (this.hmsToSecondsOnly(this.durations[j].rest_duration))
+            let setAll = (setA + setB) // * this.durations[j].reps
+            this.reps = this.durations[j].reps
+            this.inTime = '00:00:00'
+            this.$q.notify({
+                color: "blue",
+                message: `Rounded ${j+1} (Zone ${this.durations[j].place},${this.durations[j].rest})`,
+                position: "center"
+            })
+            this.round = j + 1
+            for (let i = 0; i < this.durations[j].reps; i++) {
+                this.currentReps = (i + 1)
+                for (let index = 0; index < setAll; index++) {
+                    console.log(index);
+                    console.log('[AB]', setA, setB, setAll, setAll * 1000);
+                    let zone = await Exercise.getZone(this.bleData)
+                    this.zone = (zone) ? zone : 0
+                    if (zone) {
+                        await this.storeResult(this.bleData, zone)
+                    }
+                    this.currentZone = this.durations[j].place
+                    if (index == setA) {
+                        console.log("Change Zone");
+                        this.currentZone = this.durations[j].rest
+                        // this.$q.notify({
+                        //     message: "Change to Zone "+this.currentZone,
+                        //     position: "center"
+                        // })
+                        Swal.fire({ 
+                        icon: 'success',
+                        title: "Change to Zone "+this.currentZone,
+                        showConfirmButton: false,
+                        timer: 1500
+                        })
+                    }
+                    this.timmer = index
+                    this.time = await moment(this.time, 'HH:mm:ss').add(1, 'second').format('HH:mm:ss');
+                    this.inTime = await moment(this.inTime, 'HH:mm:ss').add(1, 'second').format('HH:mm:ss');
+
+                    await this.sleep(1000);
+                    if (!this.detecting) {
+                        //this.inTime = '00:00:00'
+                        break;
+                    }
+                }
+
+                if(j == (this.durations.length-1)){
+                       this.detecting = false
+                       Swal.fire(
+                        'Good job!',
+                        'Finish Your Program',
+                        'success'
+                        )
+                }
             }
-            console.log('[DDATA]',this.bleData,zone)
-        }, 2000);
+
+        }
+        this.detecting = false
+
+    }
+    async sleep(msec: any) {
+        return new Promise(resolve => setTimeout(resolve, msec));
     }
 
-    async stopDectect(){
-        await Loading.show({message:'Stopping Decection'})
+    async stopDectect() {
+        await Loading.show({
+            message: 'Stopping Decection'
+        })
         this.detecting = false
         await Blex.stopNotify()
         clearInterval(this.detect)
-        setTimeout(async ()=> { 
+        setTimeout(async () => {
             console.log('[stop]');
             await Loading.hide()
         }, 2000);
-       // await Loading.hide()
+        // await Loading.hide()
     }
 
-    async storeResult(bpm:any,zone:any){
+    async storeResult(bpm: any, zone: any) {
         let data = {
             "hr_bpm": bpm,
             "hr_zone": zone,
@@ -197,10 +331,9 @@ export default class PageIndex extends Vue {
             "user": Auth.user.id,
             "run_main": this.runMain.id
         }
-        await Core.postHttp(`/api/exercise/run/result/`,data) 
-        console.log('[result]',data)
+        await Core.postHttp(`/api/exercise/run/result/`, data)
+        console.log('[result]', data)
     }
-
 
     get bleData() {
         return Blex.DATA
@@ -236,41 +369,52 @@ export default class PageIndex extends Vue {
         return (!this.dark) ? `text-black` : `text-gray-600`
     }
 
-
-     listGoals:any = []
-    listProgram:any = []
-    response:boolean = false
-    myPlan:any = {}
-    myGoal:any = {}
-    program:any = {}
-    durations:any = []
-       async created() {
-        this.listGoals = await Core.getHttp(`/api/exercise/goalall/?user=${this.user.id}`) 
+    listGoals: any = []
+    listProgram: any = []
+    response: boolean = false
+    myPlan: any = {}
+    myGoal: any = {}
+    program: any = {}
+    durations: any = []
+    async created() {
+        this.listGoals = await Core.getHttp(`/api/exercise/goalall/?user=${this.user.id}`)
         if (this.listGoals.length >= 1) {
-            await this.getMyGoal() 
+            await this.getMyGoal()
             await this.getProgram()
             await this.createdRunMain()
+            this.detecting = false
             this.response = true
         }
     }
 
-    async getProgram(){
+    async getProgram() {
         this.program = await Core.getHttp(`/api/exercise/program/${this.$route.query.id}/`)
         this.durations = this.program.durations
         console.log(this.durations)
     }
 
+    async getMyGoal() {
 
-      async getMyGoal() {
-          
         this.myGoal = this.listGoals[this.listGoals.length - 1]
         this.myPlan = this.myGoal.plan
         this.listProgram = this.myPlan.program
-         let dateSource = moment(this.myGoal.race_date).subtract(this.listProgram.length, 'days');
+        let dateSource = moment(this.myGoal.race_date).subtract(this.listProgram.length, 'days');
         this.myGoal.race_date_out = dateSource.format('YYYY/MM/DD')
         this.myGoal.race_date = moment(this.myGoal.race_date).format('YYYY/MM/DD')
     }
-  
+
+    hmsToSecondsOnly(str: any) {
+        var p = str.split(':'),
+            s = 0,
+            m = 1;
+
+        while (p.length > 0) {
+            s += m * parseInt(p.pop(), 10);
+            m *= 60;
+        }
+
+        return s;
+    }
 
 };
 </script>

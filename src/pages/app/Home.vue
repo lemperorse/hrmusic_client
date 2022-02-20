@@ -16,12 +16,12 @@
                 </div>
 
                 <div class="flex flex-col z-10      mt-1 p-4" :class="t">
-                    <div class="text-xl mb-2" :class="t"><span class="text-yellow-600 font-semibold">Hello</span>, {{user.first_name}} </div>
+                    <div class="text-xl mb-2" :class="t"><span class="text-yellow-600 font-semibold">{{$l('สวัสดี','Hello')}} </span>, {{user.first_name}} </div>
                     <div class="w-full   flex">
-                        <span class="text-3xl font-semibold" :class="t_gray">Goal </span>
+                        <span class="text-3xl font-semibold" :class="t_gray">{{$l('เป้าหมาย','Goal')}} </span>
                         <q-space />
                         <button @click="$router.push('/app/goal')" :class="(dark)?` bg-grey-10 text-gray-300`:` bg-yellow-500 text-white`" class="rounded-full  px-4 "> <i class="em em-first_place_medal" aria-role="presentation" aria-label="FIRST PLACE MEDAL"></i>
-                            <span class="pl-2">New Goal</span></button>
+                            <span class="pl-2">{{$l('เป้าหมายใหม่','New Goal')}} </span></button>
                     </div>
                 </div>
 
@@ -29,24 +29,24 @@
                     <GoalCard />
 
                     <div class="p-4 mt-4">
-                        <h2 :class="t" class="  text-xl font-semibold">Quick Menu</h2>
+                        <h2 :class="t" class="  text-xl font-semibold">{{$l('เมนูด่วน','Quick Menu')}} </h2>
                         <div class="flex w-full mt-2">
                             <div class="w-1/3  p-1">
                                 <div :class="(dark)?` bg-grey-10 `:` bg-red-300 `" class="shadow-xl rounded   flex flex-col items-center justify-center p-2 " @click="$router.push('/app/pace')">
                                     <span class="em em-revolving_hearts text-2xl" aria-role="presentation" aria-label="REVOLVING HEARTS"></span>
-                                    <span :class="t" class="text-gray-400 font-semibold text-xs mt-2">Pace Zone</span>
+                                    <span :class="t" class="text-gray-400 font-semibold text-xs mt-2">{{$l('โซน','Pace Zone ')}}  </span>
                                 </div>
                             </div>
                             <div class="w-1/3  p-1">
                                 <div :class="(dark)?` bg-grey-10 `:` bg-purple-300 `" class="shadow-xl rounded    flex flex-col items-center justify-center p-2 " @click="$router.push('/app/program/list')">
                                     <span class="em em-card_file_box text-2xl" aria-role="presentation" aria-label="REVOLVING HEARTS"></span>
-                                    <span :class="t" class=" font-semibold text-xs mt-2">Programs</span>
+                                    <span :class="t" class=" font-semibold text-xs mt-2">{{$l('โปรแกรม','Programs')}}</span>
                                 </div>
                             </div>
                             <div class="w-1/3  p-1">
                                 <div :class="(dark)?` bg-grey-10 `:` bg-blue-300 `" class="shadow-xl rounded  flex flex-col items-center justify-center p-2 " @click="$router.push('/app/about')">
                                     <span class="em em-loudspeaker text-2xl" aria-role="presentation" aria-label="REVOLVING HEARTS"></span>
-                                    <span :class="t" class=" font-semibold text-xs mt-2">About App</span>
+                                    <span :class="t" class=" font-semibold text-xs mt-2">{{$l('เกี่ยวกับแอพ','About App')}}</span>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +83,11 @@ import History from '../../components/Home/History.vue'
 export default class PageIndex extends Vue {
     private dark: boolean = Core.DARK
     private user: any = Auth.user
-   
+    
+        $l(th:any,en:any){
+        let lang = localStorage.getItem('lang')
+        return (lang == 'th')?th:en
+    }
 
 
     get t() {

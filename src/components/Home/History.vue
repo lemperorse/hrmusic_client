@@ -2,9 +2,10 @@
 <div >
     <div>
         <div class="flex w-full mt-6">
-            <h2 :class="t" class=" text-xl font-semibold ">History Goals</h2>
+            <h2 :class="t" class=" text-xl font-semibold ">{{$l('ประวัติ','History Goals')}}</h2>
             <q-space />
-            <button @click="goalDialog = true" :class="(dark)?` bg-grey-10 text-gray-300`:` bg-yellow-500 text-white`" class="rounded-full   px-4 text-gray-300"> <span class="mdi mdi-eye pr-2"></span> View All</button>
+            <button @click="goalDialog = true" :class="(dark)?` bg-grey-10 text-gray-300`:` bg-yellow-500 text-white`" class="rounded-full   px-4 text-gray-300"> <span class="mdi mdi-eye pr-2"></span>
+            {{$l('ดูทั้งหมด','View All')}} </button>
         </div>
 
         <div class="mt-4  " v-if="response">
@@ -17,10 +18,10 @@
                         </div>
                         <div class="w-full mt-2 flex">
                             <span class="text-blue-600 text-xs font-medium  ">
-                                <span class="font-semibold">End</span>: {{getDateEnd(goal)}}
+                                <span class="font-semibold">{{$l('จบ','End')}}</span>: {{getDateEnd(goal)}}
                             </span>
                             <span class="pl-1 pr-1 text-xs text-gray-400">|</span>
-                            <span class="text-yellow-600 text-xs font-medium  " v-if="goal.plan">{{goal.plan.program.length}} Programs</span>
+                            <span class="text-yellow-600 text-xs font-medium  " v-if="goal.plan">{{goal.plan.program.length}} {{$l('โปรแกรม','Programs')}}</span>
 
                         </div>
                     </div>
@@ -35,7 +36,7 @@
         <q-layout view="Lhh lpR fff" container class="bg-white">
             <q-header class="bg-primary">
                 <q-toolbar>
-                    <q-toolbar-title>History Goal</q-toolbar-title>
+                    <q-toolbar-title>{{$l('ประวัติ','History Goal')}}</q-toolbar-title>
 
                     <q-btn @click="goalDialog = false" flat v-close-popup round dense icon="close" />
                 </q-toolbar>
@@ -49,11 +50,11 @@
                             <q-item-section>
                                 <span :class="t" class="font-semibold">{{goal.plan.name}}</span>
                                 <span  class="text-blue-600 text-xs font-medium  ">
-                                    <span class="font-semibold">End</span>: {{getDateEnd(goal)}}
+                                    <span class="font-semibold">{{$l('จบ','End')}}</span>: {{getDateEnd(goal)}}
                                 </span>
                             </q-item-section>
                             <q-item-section avatar>
-                                <span class="text-yellow-600 text-xs font-medium  " v-if="goal.plan">{{goal.plan.program.length}} Programs</span>
+                                <span class="text-yellow-600 text-xs font-medium  " v-if="goal.plan">{{goal.plan.program.length}} {{$l('โปรแกรม','Programs')}}</span>
                             </q-item-section>
                         </q-item>
 
@@ -81,7 +82,10 @@ import moment from 'moment'
 export default class Goal extends Vue {
     private dark: boolean = Core.DARK
     private user: any = Auth.user
-
+    $l(th:any,en:any){
+        let lang = localStorage.getItem('lang')
+        return (lang == 'th')?th:en
+    }
     listGoals: any = []
     listProgram: any = []
     response: boolean = false

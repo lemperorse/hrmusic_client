@@ -6,28 +6,28 @@
           <q-btn size="xl" flat color="red" icon="west"   @click="$router.go(-1)" />
         <q-space />
         <div class="text-right">
-            <h1 :class="t"  class="text-3xl font-bold"> Profile</h1>
-            <span :class="t"  >Setting My Account</span>
+            <h1 :class="t"  class="text-3xl font-bold">  {{$l('โปรไฟล์','Profile')}}</h1>
+            <span :class="t"  >{{$l('การตั้งค่าบัญชีของฉัน','Setting My Account')}}</span>
         </div> 
     </div>
 
     <div class="flex flex-col justify-center items-center w-full">
         <form class=" w-full p-4" @submit.prevent="editUser()">
-            <q-input v-model="formUser.username" color="black" disable bg-color="white" class="m-2 mt-4" outlined type="text" label="Username" />
-            <q-input v-model="formUser.email" color="black" dense disable bg-color="white" class="m-2" outlined type="text" label="Email address" />
+            <q-input v-model="formUser.username" color="black" disable bg-color="white" class="m-2 mt-4" outlined type="text" :label="$l('ชื่อผู้ใช้','Username')" />
+            <q-input v-model="formUser.email" color="black" dense disable bg-color="white" class="m-2" outlined type="text" :label="$l('ที่อยู่อีเมล','Email address')" />
             <!-- <q-input  color="black"     bg-color="white" class="m-2" outlined type="text" label="Password confirm" />
         <q-input  color="black"    bg-color="white" class="m-2 mb-4" outlined type="text" label="Password" /> -->
             <hr>
-            <q-input v-model="formUser.first_name" color="black" dense bg-color="white" class="m-2 mt-4" outlined type="text" label="First name" />
-            <q-input v-model="formUser.last_name" color="black" dense bg-color="white" class="m-2" outlined type="text" label="Last name" />
+            <q-input v-model="formUser.first_name" color="black" dense bg-color="white" class="m-2 mt-4" outlined type="text" :label="$l('ชื่อจริง','First name')" />
+            <q-input v-model="formUser.last_name" color="black" dense bg-color="white" class="m-2" outlined type="text" :label="$l('นามสกุล','Last name')" />
 
-            <q-input v-model="formUser.bitrhday" color="black" dense bg-color="white" class="m-2" outlined type="date" label="Bitrhday" />
-            <q-input v-model="formUser.weight" color="black" dense bg-color="white" class="m-2" outlined type="number" label="Weight" />
-            <q-input v-model="formUser.height" color="black" dense bg-color="white" class="m-2" outlined type="number" label="Height" />
+            <q-input v-model="formUser.bitrhday" color="black" dense bg-color="white" class="m-2" outlined type="date" :label="$l('วันเกิด','Bitrhday')" />
+            <q-input v-model="formUser.weight" color="black" dense bg-color="white" class="m-2" outlined type="number" :label="$l('น้ำหนัก','Weight')" />
+            <q-input v-model="formUser.height" color="black" dense bg-color="white" class="m-2" outlined type="number" :label="$l('ส่วนสูง','Height')" />
 
             <div class="flex flex-row justify-around mt-4">
-                <q-btn outline class="m-2" color="orange" icon="mdi-form-textbox-password" label="Change Password" />
-                <q-btn type="submit" class="m-2" color="green" icon="check" label="Save" />
+                <q-btn   class="m-2" color="orange" icon="mdi-form-textbox-password" :label="$l('เปลี่ยนรหัสผ่าน','Change Password')" />
+                <q-btn type="submit" class="m-2" color="green" icon="check" :label="$l('บันทึก','Save')" />
             </div>
         </form>
         <br> <br>
@@ -55,7 +55,10 @@ import { Auth } from '../../store/auth'
 export default class PageIndex extends Vue {
 
     formUser:any = {}
-
+ $l(th:any,en:any){
+        let lang = localStorage.getItem('lang')
+        return (lang == 'th')?th:en
+    }
     async created(){
         await this.loadUser();
     }

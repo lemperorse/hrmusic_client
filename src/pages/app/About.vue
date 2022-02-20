@@ -4,33 +4,36 @@
           <q-btn size="xl" flat color="red" icon="west"   @click="$router.go(-1)" />
         <q-space />
         <div class="text-right">
-            <h1 :class="t"  class="text-3xl font-bold"> About</h1>
-            <span :class="t"  >Application Info data</span>
+            <h1 :class="t"  class="text-3xl font-bold" >{{$l(' เกี่ยวกับ',' About') }}</h1>
+            <span :class="t"   >{{$l('ข้อมูลการสมัคร','Application Info data') }}</span>
         </div>
     </div>
     <div :class="bg" class="flex flex-col justify-center items-center  shadow-4xl mt-10">
         <div>
           
-            <i class="em em-gift_heart text-6xl" aria-role="presentation" aria-label="HEART WITH RIBBON"></i>
+            <i class="em em-gift_heart text-6xl" aria-role="presentation" aria-label="HEART WITH RIBBON" >{{$l('','') }}</i>
         </div>
-        <h1 :class="t"  class="text-3xl font-bold">Heart Exercise</h1>
-        <span :class="t" >Application for exercise with music</span>
-        <span :class="t"  class="mt-4 font-bold">Version Beta 1.0</span>
-         <span :class="t"  class="mt-4 font-bold">Copyright 2021 © Nattapon Kumyaito</span>
+        <h1 :class="t"  class="text-3xl font-bold" >{{$l('Heart Exercise','Heart Exercise') }}</h1>
+        <span :class="t"  >{{$l('แอพพลิเคชั่นออกกำลังกายกับดนตรี','Application for exercise with music') }}</span>
+        <span :class="t"  class="mt-4 font-bold" >{{$l('เวอร์ชันเบต้า 1.01','Version Beta 1.01') }}</span>
+         <span :class="t"  class="mt-4 font-bold" >{{$l('ลิขสิทธิ์ 2564 © ณัฐพล คุ้มใหญ่โต','Copyright 2021 © Nattapon Kumyaito') }}</span>
     </div>
 
 </q-page>
 </template>
 
-<script>
-
-</script><script lang="ts">
+ <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { Core } from '../../store/core'
 @Component({
     components: {}
 })
 export default class PageIndex extends Vue {
+     $l(th:any,en:any){
+        let lang = localStorage.getItem('lang')
+        return (lang == 'th')?th:en
+    }
+
  get dark(){
       return Core.DARK
     }
