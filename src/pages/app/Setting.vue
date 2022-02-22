@@ -30,7 +30,7 @@
                 </q-item-section>
             </q-item> 
             <q-separator />
-            <q-item clickable v-ripple>
+            <q-item clickable v-ripple @click="logout()">
                 <q-item-section>{{$l('ออกจากระบบ','Logout')}}</q-item-section>
                 <q-item-section avatar>
                     <q-icon color="red" name="logout" />

@@ -33,6 +33,7 @@ class FacebookModules extends VuexModule {
         let user = await Core.getHttp(`https://graph.facebook.com/v11.0/me?fields=id%2Cname%2Clast_name%2Cfirst_name%2Cpicture&access_token=${token}`)
         let formReg = {}
         let formLog = {}
+        console.log(user);
         if(user.id){
             formReg = {
                 first_name:  user.first_name,
@@ -46,11 +47,7 @@ class FacebookModules extends VuexModule {
             formLog = {
                 username:user.id,
                 password:btoa(user.id),
-            }
-            // alert(JSON.stringify({
-            //     formReg:formReg,
-            //     formLog:formLog
-            // }))
+            } 
             return {
                 formReg:formReg,
                 formLog:formLog
