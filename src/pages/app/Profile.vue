@@ -26,7 +26,7 @@
             <q-input v-model="formUser.height" color="black" dense bg-color="white" class="m-2" outlined type="number" :label="$l('ส่วนสูง','Height')" />
 
             <div class="flex flex-row justify-around mt-4">
-                <q-btn   class="m-2" color="orange" icon="mdi-form-textbox-password" :label="$l('เปลี่ยนรหัสผ่าน','Change Password')" />
+                <q-btn @click="$router.push('/app/change')"  class="m-2" color="orange" icon="mdi-form-textbox-password" :label="$l('เปลี่ยนรหัสผ่าน','Change Password')" />
                 <q-btn type="submit" class="m-2" color="green" icon="check" :label="$l('บันทึก','Save')" />
             </div>
         </form>

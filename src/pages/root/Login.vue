@@ -22,7 +22,7 @@
                 </form>
                 <div class="flex justify-around">
                     <q-btn dense flat @click="$router.push('/register')">Register</q-btn>
-                    <q-btn @click="$router.push('/app/home')" flat dense>Forgot</q-btn>
+                    <q-btn @click="$router.push('/forgot')" flat dense>Forgot</q-btn>
                 </div>
             </div>
         </div>

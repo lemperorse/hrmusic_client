@@ -6,7 +6,8 @@ const routes: RouteConfig[] = [
     component: () => import('layouts/RootLayout.vue'),
     children: [
       { path: '', component: () => import('pages/root/Login.vue') },
-      { path: '/register', component: () => import('pages/root/Register.vue') }
+      { path: '/register', component: () => import('pages/root/Register.vue') },
+      { path: '/forgot', component: () => import('pages/root/Forgot.vue') }
     ]
   },
   {
@@ -27,6 +28,7 @@ const routes: RouteConfig[] = [
       { path: 'program/list', component: () => import('pages/app/ProgramList.vue') },
       { path: 'program/preview', component: () => import('pages/app/ProgramPreview.vue') },
       { path: 'runned/preview', component: () => import('pages/app/ProgramPreviewRunned.vue') },
+      { path: 'change/', component: () => import('pages/app/ChangePassword.vue') },
     ]
   },
 
