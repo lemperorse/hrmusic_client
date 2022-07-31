@@ -10,81 +10,119 @@
     </div>
     <div class="flex flex-col justify-center items-center">
         <div class="mt-4">
-
-            <h2 :class="t" class="text-base ml-4 font-bold">Threshold Running Pace</h2>
             <q-card class="my-card">
-                <form name="input1">
+                <h2 :class="t" class="pt-4 text-base ml-4 font-bold">My Threshold Running Pace</h2> 
+                <table style="width:100%;" cellpadding="4" cellspacing="0">
+                    <tbody>
+                        <tr bgcolor="#cccccc">
+                            <td>Recent race length</td>
+                            <td>Zone<br>1</td>
+                            <td>Zone<br>2</td>
+                            <td>Zone<br>3</td>
+                            <td>Zone<br>4</td>
+                        </tr>
+                        <tr bgcolor="#fffff">
+                            <td>
+                                <span v-if="user.my_place_zone1">{{user.my_place_race}} km</span>
+                                <span v-else>-</span>
+                            </td>
+                            <td>
+                                <span v-if="user.my_place_zone1">{{user.my_place_zone1}}</span>
+                                <span else>-</span>
+                            </td>
+                            <td>
+                                <span v-if="user.my_place_zone2">{{user.my_place_zone2}}</span>
+                                <span else>-</span>
+                            </td>
+                            <td>
+                                <span v-if="user.my_place_zone3">{{user.my_place_zone3}}</span>
+                                <span else>-</span>
+                            </td>
+                            <td>
+                                <span v-if="user.my_place_zone4">{{user.my_place_zone4}}</span>
+                                <span else>-</span>
+                            </td>
 
+                        </tr>
+                    </tbody>
+
+                </table>
+            </q-card> 
+            <br>
+            <q-card class="my-card">
+                <h2 :class="t" class="pt-4 text-base ml-4 font-bold">Threshold Running Pace</h2>
+
+                <form name="input1">
                     <div></div>
 
                     <table cellpadding="4" cellspacing="0">
                         <tbody>
                             <tr bgcolor="#cccccc">
-                                <td  >Recent race length (you can use a decimal point, eg. 26.2):</td>
+                                <td>Recent race length (you can use a decimal point, eg. 26.2):</td>
                                 <td>
                                     <div class="flex flex-row">
-                                        <input :class="input" name="length" size="6" type="text" />
+                                        <input ref="my_place_race" :class="input" name="length" size="6" type="text" />
                                         <select :class="input" name="units">
                                             <option value="km">kilometres</option>
-                                            <option value="miles">miles</option>
+                                            <!-- <option value="miles">miles</option> -->
                                         </select>
-                                    </div> 
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td >My time (hours:minutes:seconds):</td>
+                                <td>My time (hours:minutes:seconds):</td>
                                 <td>
                                     <input class="" name="hours" size="2" type="text" value="00" /> :
                                     <input name="minutes" size="2" type="text" value="00" /> :
                                     <input name="seconds" size="2" type="text" value="00" />
                                 </td>
                             </tr>
+
                             <tr bgcolor="#cccccc">
-                                <td align="right">Display my training paces in:</td>
-                                <td>
-                                    <select :class="input" name="paceType" onchange="toggleMetric()">
-                                     
-                                        <option selected="selected" value="km">min/km</option>
-                                           <option value="Miles">min/mile</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
                                 <td>&nbsp;</td>
                                 <td>
                                     <input class="p-6 rounded bg-green-600 text-white" onclick="runConversion()" type="button" value="Calculate" />
                                 </td>
                             </tr>
-                            <tr bgcolor="#cccccc">
+                            <!-- <tr>
+                                <td align="right">Display my training paces in:</td>
+                                <td>
+                                    <select ref="form_my_place_type" :class="input" name="paceType" onchange="toggleMetric()">
+                                        <option value="miles">mile/min</option>
+                                        <option value="km">km/min</option>
+                                    </select>
+                                </td>
+                            </tr> -->
+                            <tr>
                                 <td align="right">Your <a href="#easy">Zone 1</a> training pace is:</td>
                                 <td>
-                                    <input name="easy" size="17" type="text" value="" />
+                                    <input ref="form_my_place_zone1" name="easy" size="17" type="text" value="" />
                                 </td>
                             </tr>
-                            <tr bgcolor="#ffffff">
+                            <tr bgcolor="#cccccc">
                                 <td align="right">Your <a href="#tempo">Zone 2</a> training pace is:</td>
                                 <td>
-                                    <input name="tempo" size="17" type="text" value="" />
-                                </td>
-                            </tr>
-                            <tr bgcolor="#cccccc">
-                                <td align="right">Your <a href="#maxox">Zone 3</a> training pace is:</td>
-                                <td>
-                                    <input name="maximum" size="17" type="text" value="" />
+                                    <input ref="form_my_place_zone2" name="tempo" size="17" type="text" value="" />
                                 </td>
                             </tr>
                             <tr bgcolor="#ffffff">
-                                <td align="right">Your <a href="#speedform">Zone 4</a> training pace is:</td>
+                                <td align="right">Your <a href="#maxox">Zone 3</a> training pace is:</td>
                                 <td>
-                                    <input name="speed" size="17" type="text" value="" />
+                                    <input ref="form_my_place_zone3" name="maximum" size="17" type="text" value="" />
                                 </td>
                             </tr>
                             <tr bgcolor="#cccccc">
-                                <td align="right">Your <a href="#longruns">Zone 5</a> training pace is:</td>
+                                <td align="right">Your <a href="#speedform">Zone 4</a> training pace is:</td>
                                 <td>
-                                    <input name="xlong" size="17" type="text" value="" />
+                                    <input ref="form_my_place_zone4" name="speed" size="17" type="text" value="" />
                                 </td>
                             </tr>
+                            <!-- <tr bgcolor="#ffffff">
+                                <td align="right">Your <a href="#longruns">Zone 5</a> training pace is:</td>
+                                <td>
+                                    <input ref="form_my_place_zone5" name="xlong" size="17" type="text" value="" />
+                                </td>
+                            </tr> -->
                             <!-- <tr bgcolor="#ffffff">
                                 <td align="right">Your <a href="#yasso">Yasso 800s</a> training pace is:</td>
                                 <td>
@@ -96,48 +134,9 @@
                 </form>
             </q-card>
 
-            <!-- <div class="flex w-full justify-center items-center">
-
-                <q-input style="width:35%;" dense type="text" color="black" bg-color="white" class="m-1 " outlined label="Min" />
-                <q-input style="width:35%;" dense type="text" color="black" bg-color="white" class="m-1   " outlined label="Second" />
-                <q-btn round class="m-2" color="primary" icon="mdi-calculator-variant" />
-            </div>
-            <div class="p-4">
-                <q-input dense type="text" color="black" bg-color="white" class="m-1 " outlined label="Treshold HR (Bpm)" />
-            </div>
-
-            <div class="m-4 shadow-xl bg-white">
-                <q-toolbar class="bg-blue text-white">
-                    <q-toolbar-title>
-                        Personal Pace Zone
-                    </q-toolbar-title>
-
-                </q-toolbar>
-                <div class=" w-full p-4  ">
-                    <div class="flex border-b-1 border-gray-400" v-for="x in 5">
-                        <h2 class="text-base w-1/4">Z1 Easy</h2>
-                        <q-input dense type="text" color="black" bg-color="white" class="  w-1/4" outlined label="Min" />
-                        <q-input dense type="text" color="black" bg-color="white" class="ml-2 w-1/4" outlined label="Max" />
-                        <h2 class="text-base">min/km</h2>
-                    </div>
-                </div>
-            </div>
-
-            <div class="m-4 shadow-xl bg-white">
-                <q-toolbar class="bg-orange text-white">
-                    <q-toolbar-title>
-                        Personal Pace Music
-                    </q-toolbar-title>
-                </q-toolbar>
-                <div class=" w-full p-4  ">
-                    <div class="flex border-b-1 border-gray-400" v-for="x in 5">
-                        <h2 class="text-base w-1/4">Z1 Easy</h2>
-                        <q-input dense type="text" color="black" bg-color="white" class="  w-1/4" outlined label="Min" />
-                        <q-input dense type="text" color="black" bg-color="white" class="ml-2 w-1/4" outlined label="Max" />
-                        <h2 class="text-base">bpm</h2>
-                    </div>
-                </div>
-            </div> -->
+            <center><br>
+                <q-btn color="primary" icon="check" :label="$l('บันทึก','Save')" @click="saveData()" />
+            </center>
 
         </div>
     </div>
@@ -148,13 +147,49 @@
 <script>
 
 </script><script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import { Core } from "../../store/core";
+import {
+    Vue,
+    Component
+} from 'vue-property-decorator';
+import {
+    Core
+} from '../../store/core'
+import {
+    Auth
+} from '../../store/auth'
 
 @Component({
     components: {}
 })
 export default class PageIndex extends Vue {
+    $l(th: any, en: any) {
+        let lang = localStorage.getItem('lang')
+        return (lang == 'th') ? th : en
+    }
+    user: any = {}
+    async loadUser() {
+        this.user = await Auth.getUser();
+    }
+    async created() {
+        await this.loadUser()
+    }
+
+    async saveData() {
+        let data: any = this.$refs
+        let form: any = {}
+        form.my_place_race = data.my_place_race.value
+        form.my_place_zone1 = data.form_my_place_zone1.value
+        form.my_place_zone2 = data.form_my_place_zone2.value
+        form.my_place_zone3 = data.form_my_place_zone3.value
+        form.my_place_zone4 = data.form_my_place_zone4.value
+        let user = await Core.putHttp(`/api/account/userprofile/${this.user.id}/`, form)
+        if (user.id) {
+            alert('Save User Success');
+            await this.loadUser()
+            location.reload()
+        }
+    }
+
     input: string = "shadow appearance-none border rounded  p-2  text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
     get dark() {
         return Core.DARK
