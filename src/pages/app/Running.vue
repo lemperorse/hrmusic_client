@@ -40,6 +40,12 @@
                     <q-item-label caption>
                         <h3 class="text-sm font-semibold">Total Time : {{time}}</h3>
                         <h3 class="text-sm font-semibold">Round Time : {{inTime}} (Zone {{currentZone}})</h3>
+                        <h2 v-if="currentZone == 1"   class="text-green-600 text-sm font-semibold">Your Speed in Zone 1: {{user.my_place_zone1}} km/min </h2>
+                        <h2 v-if="currentZone == 2" class="text-green-600  text-sm font-semibold">Your Zone 2 : {{user.my_place_zone1}} km/min </h2>
+                        <h2 v-if="currentZone == 3" class="text-green-600  text-sm font-semibold">Your Zone 3: {{user.my_place_zone1}} km/min </h2>
+                        <h2 v-if="currentZone == 4" class="text-green-600 text-sm font-semibold">Your Zone 4: {{user.my_place_zone1}} km/min </h2>
+                        <span class="text-green-600 text-sm font-semibold" >Of {{user.my_place_race}} km</span>
+                
                     </q-item-label>
                 </q-item-section>
             </q-item>
@@ -122,11 +128,12 @@
                         <q-item-label :class="t">Zone</q-item-label>
                         <q-item-label caption>
                             <span :class="t" class="text-xl font-bold  "> {{zone}}</span>
+                         
                         </q-item-label>
                     </q-item-section>
                 </q-item>
             </div>
-            <div class="w-full p-2 ">
+            <div class="w-full p-2 "  >
                 <q-item :class="bg " class="rounded-xl border-1  ">
                     <q-item-section avatar>
                         <i class="em em-musical_note text-4xl" aria-role="presentation" aria-label="MUSICAL NOTE"></i>
@@ -192,6 +199,7 @@ export default class PageIndex extends Vue {
     private currentZone: any = 0
     private reps: number = 0
     private currentReps: number = 0
+    private user:any = Auth.user
 
     async createdRunMain() {
         await Loading.hide()

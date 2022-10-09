@@ -39,11 +39,12 @@
         var VO2max;
 
         function initGlobals() {
-            metric = false;
+            metric = true;
             VO2Max = -1;
         }
 
         function runConversion() {
+        
             var frm = document.forms.input1;
             // race time in min, length in m and speed in m/min.
             var time = document.forms.input1.hours.value * 60 + document.forms.input1.minutes.value * 1 + document.forms.input1.seconds.value / 60;
@@ -86,23 +87,24 @@
             var velYasso = velMaximum * 1.95;
 
             var toAppend;
+            var metric = true
             if (metric) {
-                toAppend = ' min/km';
+                toAppend = ' km/min';
             } else {
                 toAppend = ' min/mile';
             }
 
             var frm = document.forms.input1;
 
-            frm.easy.value = '' + timeConvert(velEasy) + toAppend;
-            frm.tempo.value = '' + timeConvert(velTempo) + toAppend;
-            frm.maximum.value = '' + timeConvert(velMaximum) + toAppend;
-            frm.speed.value = '' + timeConvert(velSpeed) + toAppend;
-            frm.xlong.value = '' + timeConvert(velEasy) + ' - ' + timeConvert(velxlong) + toAppend;
-            var oldMetric = metric;
-            metric = false;
-            frm.yasso.value = '' + timeConvert(velYasso) + ' min/800';
-            metric = oldMetric;
+            frm.easy.value = '' + timeConvert(velEasy) //+ toAppend;
+            frm.tempo.value = '' + timeConvert(velTempo) //+ toAppend;
+            frm.maximum.value = '' + timeConvert(velMaximum) //+ toAppend;
+            frm.speed.value = '' + timeConvert(velSpeed) //+ toAppend;
+            // frm.xlong.value = '' + timeConvert(velEasy) + ' - ' + timeConvert(velxlong) + toAppend;
+            // var oldMetric = metric;
+            // metric = false;
+          //  frm.yasso.value = '' + timeConvert(velYasso) // + ' min/800';
+            // metric = oldMetric;
         }
 
         // Toggle output type of paces.
@@ -141,11 +143,12 @@
             }
             minutes = Math.floor(ans);
             seconds = Math.floor((ans - minutes) * 60);
-            if (seconds > 9) {
-                return '' + minutes + ':' + seconds;
-            } else {
-                return '' + minutes + ':0' + seconds;
-            }
+            return (1/`${minutes}.${(seconds>9)?seconds:`0${seconds}`} `).toFixed(2)
+            // if (seconds > 9) {
+            //     return  '' + minutes + ':' + seconds;
+            // } else {
+            //     return '' + minutes + ':0' + seconds;
+            // }
         }
         // -->
     </script>

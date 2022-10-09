@@ -27,20 +27,20 @@
                                 <span v-else>-</span>
                             </td>
                             <td>
-                                <span v-if="user.my_place_zone1">{{user.my_place_zone1}}</span>
-                                <span else>-</span>
+                                <span v-if="user.my_place_zone1">{{user.my_place_zone1}} km/min</span>
+                                <span v-else>-</span>
                             </td>
                             <td>
-                                <span v-if="user.my_place_zone2">{{user.my_place_zone2}}</span>
-                                <span else>-</span>
+                                <span v-if="user.my_place_zone2">{{user.my_place_zone2}} km/min</span>
+                                <span v-else>-</span>
                             </td>
                             <td>
-                                <span v-if="user.my_place_zone3">{{user.my_place_zone3}}</span>
-                                <span else>-</span>
+                                <span v-if="user.my_place_zone3">{{user.my_place_zone3}} km/min</span>
+                                <span v-else>-</span>
                             </td>
                             <td>
-                                <span v-if="user.my_place_zone4">{{user.my_place_zone4}}</span>
-                                <span else>-</span>
+                                <span v-if="user.my_place_zone4">{{user.my_place_zone4}} km/min</span>
+                                <span v-else>-</span>
                             </td>
 
                         </tr>
@@ -94,37 +94,37 @@
                                 </td>
                             </tr> -->
                             <tr>
-                                <td align="right">Your <a href="#easy">Zone 1</a> training pace is:</td>
+                                <td align="right">Your <a href="#easy">Zone 1</a> training pace is (km/min):</td>
                                 <td>
                                     <input ref="form_my_place_zone1" name="easy" size="17" type="text" value="" />
                                 </td>
                             </tr>
                             <tr bgcolor="#cccccc">
-                                <td align="right">Your <a href="#tempo">Zone 2</a> training pace is:</td>
+                                <td align="right">Your <a href="#tempo">Zone 2</a> training pace is (km/min):</td>
                                 <td>
                                     <input ref="form_my_place_zone2" name="tempo" size="17" type="text" value="" />
                                 </td>
                             </tr>
                             <tr bgcolor="#ffffff">
-                                <td align="right">Your <a href="#maxox">Zone 3</a> training pace is:</td>
+                                <td align="right">Your <a href="#maxox">Zone 3</a> training pace is (km/min):</td>
                                 <td>
                                     <input ref="form_my_place_zone3" name="maximum" size="17" type="text" value="" />
                                 </td>
                             </tr>
                             <tr bgcolor="#cccccc">
-                                <td align="right">Your <a href="#speedform">Zone 4</a> training pace is:</td>
+                                <td align="right">Your <a href="#speedform">Zone 4</a> training pace is (km/min):</td>
                                 <td>
                                     <input ref="form_my_place_zone4" name="speed" size="17" type="text" value="" />
                                 </td>
                             </tr>
                             <!-- <tr bgcolor="#ffffff">
-                                <td align="right">Your <a href="#longruns">Zone 5</a> training pace is:</td>
+                                <td align="right">Your <a href="#longruns">Zone 5</a> training pace is (km/min):</td>
                                 <td>
                                     <input ref="form_my_place_zone5" name="xlong" size="17" type="text" value="" />
                                 </td>
                             </tr> -->
                             <!-- <tr bgcolor="#ffffff">
-                                <td align="right">Your <a href="#yasso">Yasso 800s</a> training pace is:</td>
+                                <td align="right">Your <a href="#yasso">Yasso 800s</a> training pace is (km/min):</td>
                                 <td>
                                     <input name="yasso" size="17" type="text" value="" />
                                 </td>
@@ -186,7 +186,7 @@ export default class PageIndex extends Vue {
         if (user.id) {
             alert('Save User Success');
             await this.loadUser()
-            location.reload()
+         //   location.reload()
         }
     }
 
