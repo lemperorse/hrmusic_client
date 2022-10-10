@@ -362,8 +362,7 @@ export default class PageIndex extends Vue {
         lng: 99.8753085
     }]
 
-    private dark: boolean = Core.DARK
-    private user: any = Auth.user
+    private dark: boolean = Core.DARK 
     get t() {
         return (!this.dark) ? `text-black` : `text-white`
     }

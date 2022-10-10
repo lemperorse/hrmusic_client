@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.le.hr.music" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.le.hr.music" version="7.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Heart Exercise</name>
-    <description>A Quasar Framework app</description>
+    <description>Runing with your Zone</description>
     <author email="pongvarid@gmail.com" href="http://cordova.io">
         Le Team
     </author>

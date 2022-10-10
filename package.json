@@ -1,7 +1,7 @@
 {
     "name": "test_ble_login",
-    "version": "0.0.1",
-    "description": "A Quasar Framework app",
+    "version": "7.0.1",
+    "description": "Runing with your Zone",
     "productName": "Heart Music",
     "author": "Pongv",
     "private": true,
@@ -9,6 +9,7 @@
         "test": "echo \"No test specified\" && exit 0",
         "android": "quasar dev -m cordova -T android",
         "ios": "quasar dev -m cordova -T ios",
+        "android-build-sign2": "quasar build -m cordova -T android && cd src-cordova && cordova run android --prod --release -- --keystore=keystore.jks --storePassword=password --alias=user --password=password --packageType=bundle && cd ../",
         "android-build-sign": "quasar build -m cordova -T android && cd src-cordova && cordova run android --prod --release -- --keystore=keystore.jks --storePassword=password --alias=user --password=password && cd ../"
     },
     "dependencies": {
