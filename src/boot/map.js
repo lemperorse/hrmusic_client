@@ -5,7 +5,7 @@ export default ({ Vue }) => {
   console.log("maps plugings");
   Vue.use(VueGoogleMaps, {
     load: {
-      key: 'AIzaSyC_w9yzNOHB0-EM87ZebuyRSCsMkOQ_tac',
+      key: 'AIzaSyC04k2TIJBXUa0yJQ0N2XimbuiVubkgG6g',
       libraries: 'places,drawing', // This is required if you use the Autocomplete plugin
       // OR: libraries: 'places,drawing'
       // OR: libraries: 'places,drawing,visualization'
