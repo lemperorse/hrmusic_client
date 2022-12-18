@@ -9,9 +9,7 @@
                 <i class="em em-hearts" aria-role="presentation" aria-label="BLACK HEART SUIT"></i>
                 <span class="ml-2">{{bleData}} bpm </span>
             </q-btn>
-            <!-- <q-avatar>
-                        <img src="https://cdn.quasar.dev/img/avatar.png">
-                    </q-avatar> -->
+           
         </div>
     </div>
     <gmap-map :options="{streetViewControl : false,}" :center="center" :zoom="15" ref="mainmap" style="width: 100%; height: 16rem" class="mrt-10">
@@ -161,6 +159,7 @@ import {
     Vue,
     Component
 } from 'vue-property-decorator';
+import Map from '../../components/Map.vue'
 import {
     Blex
 } from '../../store/bluetooth'
@@ -184,7 +183,9 @@ import {
 } from 'quasar'
 
 @Component({
-    components: {}
+    components: {
+        Map
+    }
 })
 export default class PageIndex extends Vue {
 
